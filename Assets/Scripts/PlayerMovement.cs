@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Division State")]
+    public bool isActivePlayer = true;
+
     [Header("Player Settings")]
     [Header("")]
     [Header("Mouse/Aim/Look Settings")]
 
     // Mouse/Aim/Look
-    [SerializeField] private float lookSensitivity;
-    [SerializeField] private float mouseScrollSensitivity;
+    [SerializeField] public float lookSensitivity;
 
     [Header("Movement Settings")]
     [SerializeField] private float groundSpeed;
@@ -17,20 +19,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sprintSpeedPercent;
 
     [Header("Jump/Air control Settings")]
-    [SerializeField] private float jumpHeight;
+    [SerializeField] public float jumpHeight;
     [SerializeField] private float jumpCutMultiplier;
     [SerializeField] private float coyoteTimer;
-    [SerializeField] private float diveLength;
-    [SerializeField] private float diveCooldown;
 
 
     [Header("Friction Settings")]
     [SerializeField] private float groundFriction;
     [SerializeField] private float airFriction;
 
-    [Header("Camera Settings")]
-    [SerializeField] private float cameraDistanceMin;
-    [SerializeField] private float cameraDistanceMax;
 
     [Header("Dependencies")]
     [SerializeField] private InputManager inputManager;
@@ -39,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask floorLayer;
 
 
-    
+
     bool isGrounded;
     Vector3 desiredVelocity;
     Vector2 moveInput;
@@ -50,10 +47,12 @@ public class PlayerMovement : MonoBehaviour
     float coyoteTime;
     bool sprintHeld;
 
-
-
-    Vector3 groundNormal;
     RaycastHit groundHit;
+
+
+    public GameObject dividedPrefab;
+    public PlayerMovement activePlayer;
+    PlayerMovement inactivePlayer;
 
 
     void Start()
@@ -64,6 +63,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!isActivePlayer)
+        {
+            return;
+        }
+
         // CACHE INPUTS
         var input = InputManager.instance.Input.Gameplay;
 
@@ -76,12 +80,19 @@ public class PlayerMovement : MonoBehaviour
             jumpPressed = true;
         }
         // CACHE INPUTS END
+
+
+        Vector2 lookDelta = input.Look.ReadValue<Vector2>();
+        float mouseX = lookDelta.x * lookSensitivity;
+        transform.Rotate(Vector3.up * mouseX);
+
+        float mouseY = lookDelta.y * lookSensitivity;
+
     }
 
     private void FixedUpdate()
     {
         isGrounded = CheckGrounded(out groundHit);
-        groundNormal = isGrounded ? groundHit.normal : Vector3.up;
 
         GetDesiredVelocity();
 
@@ -191,5 +202,27 @@ public class PlayerMovement : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawLine(center, center + Vector3.down * castDistance);
+    }
+
+
+
+    // Divide methods
+
+    public void SetActive(bool active)
+    {
+        isActivePlayer = active;
+
+        var cam = GetComponentInChildren<Camera>();
+        if (cam != null)
+            cam.enabled = active;
+
+        var listener = GetComponentInChildren<AudioListener>();
+        if (listener != null)
+            listener.enabled = active;
+
+        if (!active)
+        {
+            rb.linearVelocity = Vector3.zero;
+        }
     }
 }
