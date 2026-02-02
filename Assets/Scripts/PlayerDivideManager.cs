@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerDivideManager : MonoBehaviour
@@ -5,6 +6,7 @@ public class PlayerDivideManager : MonoBehaviour
     [Header("References")]
     public PlayerMovement playerPrefab;
     public PlayerMovement originalPlayer;
+    public PlayerCamera playerCamera;
 
     [Header("Division Settings")]
     public float recombineRadius;
@@ -13,12 +15,24 @@ public class PlayerDivideManager : MonoBehaviour
     PlayerMovement bodyB;
 
     bool isDivided;
-    PlayerMovement activePlayer;
+
+    public PlayerMovement activePlayer;
+
+    public PlayerMovement ActivePlayer => activePlayer;
+
+    [Header("Camera")]
+    [SerializeField] Camera mainCamera;
+    [SerializeField] Vector3 cameraLocalOffset;
+    [SerializeField] float swapCameraDuration = 0.25f;
+    [SerializeField] AnimationCurve swapCameraCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    bool isCameraTransitioning;
 
     void Start()
     {
         bodyA = originalPlayer;
         activePlayer = bodyA;
+
+        AttachCameraInstant(activePlayer);
     }
 
     void Update()
@@ -45,8 +59,9 @@ public class PlayerDivideManager : MonoBehaviour
     {
         isDivided = true;
 
-        Vector3 spawnOffset = bodyA.transform.forward * 0.5f;
-        bodyB = Instantiate(playerPrefab, bodyA.transform.position + spawnOffset, bodyA.transform.rotation);
+        bodyB = Instantiate(playerPrefab, bodyA.transform.position, bodyA.transform.rotation);
+
+        Physics.IgnoreCollision(bodyA.playerCollider, bodyB.playerCollider, true);
 
         // Momentum split
         Vector3 velocity = bodyA.GetComponent<Rigidbody>().linearVelocity;
@@ -58,15 +73,23 @@ public class PlayerDivideManager : MonoBehaviour
         bodyB.SetActive(true);
 
         activePlayer = bodyB;
+        AttachCameraInstant(activePlayer);
     }
 
     void SwapBodies()
     {
-        activePlayer.SetActive(false);
+        if (isCameraTransitioning)
+        {
+            return;
+        }
 
+        PlayerMovement fromPlayer = activePlayer;
+
+        fromPlayer.SetActive(false);
         activePlayer = activePlayer == bodyA ? bodyB : bodyA;
-
         activePlayer.SetActive(true);
+
+        StartCoroutine(SwapCamera(fromPlayer, activePlayer));
     }
 
     void TryRecombine()
@@ -95,6 +118,60 @@ public class PlayerDivideManager : MonoBehaviour
         bodyB = null;
 
         activePlayer = survivor;
-        originalPlayer = activePlayer;
+        originalPlayer = survivor;
+
+        AttachCameraInstant(activePlayer);
+    }
+
+
+
+    //Camera stuff
+
+    void AttachCameraInstant(PlayerMovement player)
+    {
+        mainCamera.transform.SetParent(player.cameraAnchor);
+        mainCamera.transform.localPosition = cameraLocalOffset;
+        mainCamera.transform.localRotation = Quaternion.identity;
+
+        playerCamera.SetAnchor(player.cameraAnchor);
+    }
+
+
+    IEnumerator SwapCamera(PlayerMovement from, PlayerMovement to)
+    {
+        isCameraTransitioning = true;
+
+        Transform cam = mainCamera.transform;
+        Transform fromAnchor = from.cameraAnchor;
+        Transform toAnchor = to.cameraAnchor;
+
+        cam.SetParent(null);
+
+        Vector3 startPos = fromAnchor.position;
+        Quaternion startRot = fromAnchor.rotation;
+
+        Vector3 endPos = toAnchor.position;
+        Quaternion endRot = toAnchor.rotation;
+
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / swapCameraDuration;
+            float eased = swapCameraCurve.Evaluate(t);
+
+            cam.position = Vector3.Lerp(startPos, endPos, eased);
+            cam.rotation = Quaternion.Slerp(startRot, endRot, eased);
+
+            yield return null;
+        }
+
+        cam.position = endPos;
+        cam.rotation = endRot;
+        cam.SetParent(toAnchor.parent);
+        playerCamera.SetAnchor(toAnchor);
+
+
+        isCameraTransitioning = false;
     }
 }

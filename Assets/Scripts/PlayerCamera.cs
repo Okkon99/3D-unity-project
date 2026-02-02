@@ -4,42 +4,49 @@ using UnityEngine.Windows;
 
 public class PlayerCamera : MonoBehaviour
 {
-    [SerializeField] float changeFieldOfView;
+    public float pitch;
+    private PlayerDivideManager divideManager;
+    public Transform currentAnchor { get; private set; }
 
-    private PlayerMovement player;
-    private Transform cameraTransform;
-
-    private Camera cam;
-
-    float pitch;
-
-    void Start()
+    private void Awake()
     {
-        player = GetComponentInParent<PlayerMovement>();
-        cameraTransform = transform;
-        cam = GetComponent<Camera>();
+        divideManager = FindFirstObjectByType<PlayerDivideManager>();
     }
 
-    void Update()
+    private void Update()
     {
-        { // MOUSE PITCH
-            var input = InputManager.instance.Input.Gameplay;
-
-            Vector2 lookDelta = input.Look.ReadValue<Vector2>();
-
-            float mouseY = lookDelta.y * player.lookSensitivity;
-
-            pitch -= mouseY;
-            pitch = Mathf.Clamp(pitch, -89f, 89f);
-
-            cameraTransform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
-        } // MOUSE PITCH
-
-        cam.fieldOfView = changeFieldOfView;
-
-        if (!player.isActivePlayer)
+        if (divideManager == null)
         {
-            
+            return;
         }
+
+        PlayerMovement activePlayer = divideManager.activePlayer;
+        if (activePlayer == null || !activePlayer.isActivePlayer)
+        {
+            return;
+        }
+
+        var input = InputManager.instance.Input.Gameplay;
+        float mouseY = input.Look.ReadValue<Vector2>().y * activePlayer.lookSensitivity;
+
+        UpdatePitch(mouseY);
+    }
+
+    public void UpdatePitch(float mouseY)
+    {
+        if (currentAnchor == null)
+        {
+            return;
+        }
+
+        pitch -= mouseY;
+        pitch = Mathf.Clamp(pitch, -89f, 89f);
+        currentAnchor.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+    }
+
+    public void SetAnchor(Transform newAnchor)
+    {
+        currentAnchor = newAnchor;
+        currentAnchor.localRotation= Quaternion.Euler(pitch, 0f, 0f);
     }
 }

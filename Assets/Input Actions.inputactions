@@ -61,6 +61,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Reset",
+                    "type": "Button",
+                    "id": "3c643861-dd5e-4865-a0a9-14a6fc1fe47b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Look",
                     "type": "Value",
                     "id": "93af7b28-5fa8-4195-9617-3b5737682ae9",
@@ -156,6 +165,28 @@
                     "processors": "",
                     "groups": ";Controllers",
                     "action": "Recombine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "59a2b5c2-09d3-40b7-b5ec-5260143d86fb",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";MKB",
+                    "action": "Reset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5462a527-ebad-4ad5-872a-8f5f59a89a4f",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controllers",
+                    "action": "Reset",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -32,12 +33,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float fallGravityMultiplier;
     [SerializeField] float lowJumpGravityMultiplier;
 
-
     [Header("Dependencies")]
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private CapsuleCollider playerCollider;
+    [SerializeField] public CapsuleCollider playerCollider;
     [SerializeField] private LayerMask floorLayer;
-
+    [SerializeField] private InputManager inputManager;
+    [SerializeField] public Transform cameraAnchor;
 
 
     bool isGrounded;
@@ -52,12 +53,14 @@ public class PlayerMovement : MonoBehaviour
     float coyoteTime;
     RaycastHit groundHit;
 
-
+    //debug stuff
+    Vector3 startPos;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        startPos = transform.position;
     }
 
     void Update()
@@ -78,21 +81,24 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpPressed = true;
         }
-        // CACHE INPUTS END
-
 
         Vector2 lookDelta = input.Look.ReadValue<Vector2>();
-        float mouseX = lookDelta.x * lookSensitivity;
-        transform.Rotate(Vector3.up * mouseX);
+        
+        // CACHE INPUTS END
 
+        float mouseX = lookDelta.x * lookSensitivity;
         float mouseY = lookDelta.y * lookSensitivity;
 
+        transform.Rotate(Vector3.up * mouseX);
+
+        if (input.Reset.triggered)
+        {
+            transform.position = startPos;
+        }
     }
 
     private void FixedUpdate()
     {
-        isGrounded = CheckGrounded(out groundHit);
-
         GetDesiredVelocity();
 
         ApplyAccelVector();
@@ -100,11 +106,10 @@ public class PlayerMovement : MonoBehaviour
         ApplyFriction();
 
         //Jump
-        wasGrounded = isGrounded; // wasGrounded = Last frame's isGrounded.
-        isGrounded = CheckGrounded(out groundHit); // isGrounded is now THIS frame's isGrounded.
-
-        if (!wasGrounded && isGrounded) // Checks if the player touched the ground THIS
-        {                               // frame but not the previous (did the player JUST land?)
+        wasGrounded = isGrounded;                   // wasGrounded = Last frame's isGrounded.
+        isGrounded = CheckGrounded(out groundHit);  // isGrounded is now THIS frame's isGrounded.
+        if (!wasGrounded && isGrounded)             // Checks if the player touched the ground THIS
+        {                                           // frame but not the previous (did the player JUST land?)
             OnLanded();
         }
         else
@@ -237,7 +242,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 center = playerCollider.bounds.center;
         float radius = playerCollider.radius * 0.95f;
-        float height = playerCollider.height * 0.5f - radius;
+        float height = playerCollider.height * 0.5f - playerCollider.radius;
 
         Vector3 bottom = center + Vector3.down * height;
 
@@ -250,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 center = playerCollider.bounds.center;
         float radius = playerCollider.radius * 0.95f;
-        float height = playerCollider.height * 0.5f - radius;
+        float height = playerCollider.height * 0.5f - playerCollider.radius;
 
         Vector3 bottom = center + Vector3.down * height;
 
@@ -265,10 +270,6 @@ public class PlayerMovement : MonoBehaviour
     public void SetActive(bool active)
     {
         isActivePlayer = active;
-
-        var cam = GetComponentInChildren<Camera>();
-        if (cam != null)
-            cam.enabled = active;
 
         var listener = GetComponentInChildren<AudioListener>();
         if (listener != null)
