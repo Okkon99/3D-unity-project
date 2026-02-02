@@ -11,9 +11,11 @@ public class RaisedPlatform : MonoBehaviour
     [SerializeField] private float PlatformSizeY = 1f;
     [SerializeField] private float PlatformSizeZ = 5f;
 
-
     private Transform pillar;
     private Transform platform;
+
+    
+
 
     private void OnValidate()
     {
