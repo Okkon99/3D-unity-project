@@ -168,7 +168,7 @@ public class PlayerDivideManager : MonoBehaviour
 
         cam.position = endPos;
         cam.rotation = endRot;
-        cam.SetParent(toAnchor.parent);
+        cam.SetParent(toAnchor);
         playerCamera.SetAnchor(toAnchor);
 
 
