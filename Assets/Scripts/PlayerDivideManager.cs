@@ -7,7 +7,7 @@ public class PlayerDivideManager : MonoBehaviour
     public PlayerMovement originalPlayer;
 
     [Header("Division Settings")]
-    public float recombineRadius = 1.5f;
+    public float recombineRadius;
 
     PlayerMovement bodyA;
     PlayerMovement bodyB;

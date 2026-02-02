@@ -28,9 +28,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundFriction;
     [SerializeField] private float airFriction;
 
+    [Header("Gravity Feel")]
+    [SerializeField] float fallGravityMultiplier;
+    [SerializeField] float lowJumpGravityMultiplier;
+
 
     [Header("Dependencies")]
-    [SerializeField] private InputManager inputManager;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider playerCollider;
     [SerializeField] private LayerMask floorLayer;
@@ -38,21 +41,17 @@ public class PlayerMovement : MonoBehaviour
 
 
     bool isGrounded;
+    bool wasGrounded;
     Vector3 desiredVelocity;
     Vector2 moveInput;
+    bool sprintHeld;
     bool jumpPressed;
     bool jumpHeld;
     bool canJump;
     bool isJumping;
     float coyoteTime;
-    bool sprintHeld;
-
     RaycastHit groundHit;
 
-
-    public GameObject dividedPrefab;
-    public PlayerMovement activePlayer;
-    PlayerMovement inactivePlayer;
 
 
     void Start()
@@ -101,15 +100,19 @@ public class PlayerMovement : MonoBehaviour
         ApplyFriction();
 
         //Jump
-        if (isGrounded)
-        {
-            ResetCoyoteTime();
-            isJumping = false;
+        wasGrounded = isGrounded; // wasGrounded = Last frame's isGrounded.
+        isGrounded = CheckGrounded(out groundHit); // isGrounded is now THIS frame's isGrounded.
+
+        if (!wasGrounded && isGrounded) // Checks if the player touched the ground THIS
+        {                               // frame but not the previous (did the player JUST land?)
+            OnLanded();
         }
         else
         {
             CoyoteTimeCountdown();
         }
+
+        ApplyBetterGravity();
 
         canJump = isGrounded || coyoteTime > 0f;
 
@@ -117,6 +120,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
+
+        jumpPressed = false;
 
         if (!jumpHeld && isJumping && rb.linearVelocity.y > 0f)
         {
@@ -138,7 +143,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpHeight, rb.linearVelocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        rb.AddForce(Vector3.up * jumpHeight, ForceMode.VelocityChange);
+
         coyoteTime = 0f;
         isJumping = true;
     }
@@ -147,6 +154,21 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier, rb.linearVelocity.z);
 
         isJumping = false;
+    }
+
+    private void OnLanded()
+    {
+        ResetCoyoteTime();
+        isJumping = false;
+
+        if (rb.linearVelocity.y < 0f)
+        {
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                0f,
+                rb.linearVelocity.z
+            );
+        }
     }
 
     private void GetDesiredVelocity()
@@ -184,24 +206,56 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyFriction()
     {
-        rb.linearDamping = isGrounded ? groundFriction : airFriction;
+        Vector3 vel = rb.linearVelocity;
+        float damping = isGrounded ? groundFriction : airFriction;
+
+        vel.x *= 1f - damping * Time.fixedDeltaTime;
+        vel.z *= 1f - damping * Time.fixedDeltaTime;
+
+        rb.linearVelocity = new Vector3(vel.x, rb.linearVelocity.y, vel.z);
+    }
+
+    private void ApplyBetterGravity()
+    {
+        if (rb.linearVelocity.y < 0f)
+        {
+            rb.AddForce(
+                Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1f),
+                ForceMode.Acceleration
+            );
+        }
+        else if (rb.linearVelocity.y > 0f && !jumpHeld)
+        {
+            rb.AddForce(
+                Vector3.up * Physics.gravity.y * (lowJumpGravityMultiplier - 1f),
+                ForceMode.Acceleration
+            );
+        }
     }
 
     private bool CheckGrounded(out RaycastHit hit)
     {
-        Vector3 center = transform.position;
-        float castDistance = 1.25f;
+        Vector3 center = playerCollider.bounds.center;
+        float radius = playerCollider.radius * 0.95f;
+        float height = playerCollider.height * 0.5f - radius;
 
-        return Physics.Raycast(center, Vector3.down, out hit, castDistance, floorLayer);
+        Vector3 bottom = center + Vector3.down * height;
+
+        float checkDistance = 0.15f;
+
+        return Physics.SphereCast(bottom, radius, Vector3.down, out hit, checkDistance, floorLayer, QueryTriggerInteraction.Ignore);
     }
 
     private void OnDrawGizmos()
     {
-        Vector3 center = transform.position;
-        float castDistance = 1.25f;
+        Vector3 center = playerCollider.bounds.center;
+        float radius = playerCollider.radius * 0.95f;
+        float height = playerCollider.height * 0.5f - radius;
+
+        Vector3 bottom = center + Vector3.down * height;
 
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(center, center + Vector3.down * castDistance);
+        Gizmos.DrawSphere(bottom, radius);
     }
 
 
@@ -222,6 +276,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (!active)
         {
+            moveInput = Vector2.zero;
+            jumpPressed = false;
+            jumpHeld = false;
+            sprintHeld = false;
+
             rb.linearVelocity = Vector3.zero;
         }
     }

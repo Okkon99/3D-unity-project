@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823585590660729117}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.65183365, y: 0, z: 0, w: 0.758362}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -206,19 +206,16 @@ MonoBehaviour:
   airSpeed: 6
   acceleration: 35
   sprintSpeedPercent: 150
-  jumpHeight: 4
+  jumpHeight: 5
   jumpCutMultiplier: 0.3
   coyoteTimer: 0.12
   groundFriction: 1
   airFriction: 0
-  inputManager: {fileID: 0}
   rb: {fileID: 2642418309012457911}
   playerCollider: {fileID: 8325845318896213540}
   floorLayer:
     serializedVersion: 2
     m_Bits: 64
-  dividedPrefab: {fileID: 0}
-  activePlayer: {fileID: 0}
 --- !u!33 &6940822998859806502
 MeshFilter:
   m_ObjectHideFlags: 0
