@@ -87,7 +87,6 @@ public class PlayerDivideManager : MonoBehaviour
 
         fromPlayer.SetActive(false);
         activePlayer = activePlayer == bodyA ? bodyB : bodyA;
-        activePlayer.SetActive(true);
 
         StartCoroutine(SwapCamera(fromPlayer, activePlayer));
     }
@@ -150,9 +149,6 @@ public class PlayerDivideManager : MonoBehaviour
         Vector3 startPos = fromAnchor.position;
         Quaternion startRot = fromAnchor.rotation;
 
-        Vector3 endPos = toAnchor.position;
-        Quaternion endRot = toAnchor.rotation;
-
         float t = 0f;
 
         while (t < 1f)
@@ -160,16 +156,21 @@ public class PlayerDivideManager : MonoBehaviour
             t += Time.deltaTime / swapCameraDuration;
             float eased = swapCameraCurve.Evaluate(t);
 
-            cam.position = Vector3.Lerp(startPos, endPos, eased);
-            cam.rotation = Quaternion.Slerp(startRot, endRot, eased);
+            Vector3 currentEndPos = toAnchor.position;
+            Quaternion currentEndRot = toAnchor.rotation;
+
+            cam.position = Vector3.Lerp(startPos, currentEndPos, eased);
+            cam.rotation = Quaternion.Slerp(startRot, currentEndRot, eased);
 
             yield return null;
         }
 
-        cam.position = endPos;
-        cam.rotation = endRot;
+        cam.position = toAnchor.position;
+        cam.rotation = toAnchor.rotation;
         cam.SetParent(toAnchor);
         playerCamera.SetAnchor(toAnchor);
+
+        to.SetActive(true);
 
 
         isCameraTransitioning = false;
