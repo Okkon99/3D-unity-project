@@ -60,6 +60,7 @@ public class PlayerDivideManager : MonoBehaviour
         isDivided = true;
 
         bodyB = Instantiate(playerPrefab, bodyA.transform.position, bodyA.transform.rotation);
+        bodyB.storedPitch = bodyA.storedPitch;
 
         Physics.IgnoreCollision(bodyA.playerCollider, bodyB.playerCollider, true);
 
@@ -132,7 +133,7 @@ public class PlayerDivideManager : MonoBehaviour
         mainCamera.transform.localPosition = cameraLocalOffset;
         mainCamera.transform.localRotation = Quaternion.identity;
 
-        playerCamera.SetAnchor(player.cameraAnchor);
+        playerCamera.SetAnchor(player.cameraAnchor, player.storedPitch);
     }
 
 
@@ -168,7 +169,7 @@ public class PlayerDivideManager : MonoBehaviour
         cam.position = toAnchor.position;
         cam.rotation = toAnchor.rotation;
         cam.SetParent(toAnchor);
-        playerCamera.SetAnchor(toAnchor);
+        playerCamera.SetAnchor(toAnchor, to.storedPitch);
 
         to.SetActive(true);
 

@@ -26,10 +26,14 @@ public class PlayerCamera : MonoBehaviour
             return;
         }
 
+        pitch = activePlayer.storedPitch;
+
         var input = InputManager.instance.Input.Gameplay;
         float mouseY = input.Look.ReadValue<Vector2>().y * activePlayer.lookSensitivity;
 
         UpdatePitch(mouseY);
+
+        activePlayer.storedPitch = pitch;
     }
 
     public void UpdatePitch(float mouseY)
@@ -44,9 +48,10 @@ public class PlayerCamera : MonoBehaviour
         currentAnchor.localRotation = Quaternion.Euler(pitch, 0f, 0f);
     }
 
-    public void SetAnchor(Transform newAnchor)
+    public void SetAnchor(Transform newAnchor, float pitchFromPlayer)
     {
         currentAnchor = newAnchor;
+        pitch = pitchFromPlayer;
         currentAnchor.localRotation= Quaternion.Euler(pitch, 0f, 0f);
     }
 }

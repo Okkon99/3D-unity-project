@@ -33,6 +33,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float fallGravityMultiplier;
     [SerializeField] float lowJumpGravityMultiplier;
 
+    [Header("Camera State")]
+    [SerializeField] public float storedPitch;
+
+
     [Header("Dependencies")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] public CapsuleCollider playerCollider;
