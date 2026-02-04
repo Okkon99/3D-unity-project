@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
+using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Jump/Air control Settings")]
     [SerializeField] public float jumpHeight;
-    [SerializeField] private float jumpCutMultiplier;
     [SerializeField] private float coyoteTimer;
 
 
@@ -94,11 +95,6 @@ public class PlayerMovement : MonoBehaviour
         float mouseY = lookDelta.y * lookSensitivity;
 
         transform.Rotate(Vector3.up * mouseX);
-
-        if (input.Reset.triggered)
-        {
-            transform.position = startPos;
-        }
     }
 
     private void FixedUpdate()
@@ -129,13 +125,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
-
         jumpPressed = false;
-
-        if (!jumpHeld && isJumping && rb.linearVelocity.y > 0f)
-        {
-            JumpCancel();
-        }
     }
 
 
@@ -157,12 +147,6 @@ public class PlayerMovement : MonoBehaviour
 
         coyoteTime = 0f;
         isJumping = true;
-    }
-    private void JumpCancel()
-    {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier, rb.linearVelocity.z);
-
-        isJumping = false;
     }
 
     private void OnLanded()

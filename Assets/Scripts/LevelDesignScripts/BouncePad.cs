@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR;
 
 public class BouncePad : MonoBehaviour
 {
@@ -6,7 +7,15 @@ public class BouncePad : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        collision.rigidbody.AddForce(0f, bouncePower, 0f, ForceMode.Impulse);
+        Rigidbody rb = collision.rigidbody;
+        if (rb == null)
+        {
+            return;
+        }
+
+        Vector3 upDir = transform.up;
+
+        rb.AddForce(upDir * bouncePower, ForceMode.Impulse);
     }
 
 }

@@ -4,14 +4,20 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     [SerializeField] RaisedPlatform raisedPlatform;
+    [SerializeField] GateScript gateScript;
 
     private void OnCollisionStay(Collision collision)
     {
-        raisedPlatform.OnTriggerActivatePlatform(true);
+        if (raisedPlatform != null)
+            raisedPlatform.OnTriggerActivatePlatform(true);
+
+        if (gateScript != null)
+            gateScript.OnTriggerActivateGate(true);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        raisedPlatform.OnTriggerActivatePlatform(false);
+        if (raisedPlatform != null)
+            raisedPlatform.OnTriggerActivatePlatform(false);
     }
 }

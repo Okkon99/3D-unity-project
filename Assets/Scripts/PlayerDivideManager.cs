@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerDivideManager : MonoBehaviour
 {
@@ -53,6 +54,11 @@ public class PlayerDivideManager : MonoBehaviour
         {
             TryRecombine();
         }
+
+        if (input.Reset.triggered)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     void Divide()
@@ -68,6 +74,13 @@ public class PlayerDivideManager : MonoBehaviour
         Vector3 velocity = bodyA.GetComponent<Rigidbody>().linearVelocity;
         bodyB.GetComponent<Rigidbody>().linearVelocity = velocity * 2f;
         bodyA.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+
+        var fov = mainCamera.GetComponent<MomentumFOV>();
+        if (fov != null)
+        {
+            float strength = bodyB.GetComponent<Rigidbody>().linearVelocity.magnitude / 10f;
+            fov.AddDivideImpulse(strength);
+        }
  
 
         bodyA.SetActive(false);
@@ -134,6 +147,12 @@ public class PlayerDivideManager : MonoBehaviour
         mainCamera.transform.localRotation = Quaternion.identity;
 
         playerCamera.SetAnchor(player.cameraAnchor, player.storedPitch);
+
+        var fov = mainCamera.GetComponent<MomentumFOV>();
+        if (fov != null)
+        {
+            fov.SetVelocitySource(player.GetComponent<Rigidbody>());
+        }
     }
 
 
@@ -173,7 +192,10 @@ public class PlayerDivideManager : MonoBehaviour
 
         to.SetActive(true);
 
-
         isCameraTransitioning = false;
+
+        var fov = mainCamera.GetComponent<MomentumFOV>();
+        if (fov != null)
+            fov.SetVelocitySource(to.GetComponent<Rigidbody>());
     }
 }
