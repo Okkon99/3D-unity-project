@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,7 @@ public class PlayerDivideManager : MonoBehaviour
 
     [Header("Division Settings")]
     public float recombineRadius;
+    public float suctionMultiplier;
 
     PlayerMovement bodyA;
     PlayerMovement bodyB;
@@ -18,6 +20,7 @@ public class PlayerDivideManager : MonoBehaviour
     bool isDivided;
 
     public PlayerMovement activePlayer;
+    public PlayerMovement inactivePlayer;
 
     public PlayerMovement ActivePlayer => activePlayer;
 
@@ -32,6 +35,7 @@ public class PlayerDivideManager : MonoBehaviour
     {
         bodyA = originalPlayer;
         activePlayer = bodyA;
+        inactivePlayer = null;
 
         AttachCameraInstant(activePlayer);
     }
@@ -87,6 +91,8 @@ public class PlayerDivideManager : MonoBehaviour
         bodyB.SetActive(true);
 
         activePlayer = bodyB;
+        inactivePlayer = bodyA;
+
         AttachCameraInstant(activePlayer);
     }
 
@@ -97,21 +103,31 @@ public class PlayerDivideManager : MonoBehaviour
             return;
         }
 
-        PlayerMovement fromPlayer = activePlayer;
+        PlayerMovement previousActive = activePlayer;
 
-        fromPlayer.SetActive(false);
-        activePlayer = activePlayer == bodyA ? bodyB : bodyA;
+        previousActive.SetActive(false);
 
-        StartCoroutine(SwapCamera(fromPlayer, activePlayer));
+        activePlayer = inactivePlayer;
+        inactivePlayer = previousActive;
+
+        StartCoroutine(SwapCamera(previousActive, activePlayer));
     }
 
     void TryRecombine()
     {
         float dist = Vector3.Distance(bodyA.transform.position, bodyB.transform.position);
 
-        if (dist <= recombineRadius)
+        if (dist <= recombineRadius * suctionMultiplier)
         {
-            Recombine();
+            inactivePlayer.transform.position = Vector3.MoveTowards(
+                inactivePlayer.transform.position,
+                activePlayer.transform.position,
+                2f * Time.deltaTime
+                );
+            if (dist <= recombineRadius)
+            {
+                Recombine();
+            }
         }
     }
 
@@ -120,17 +136,16 @@ public class PlayerDivideManager : MonoBehaviour
         isDivided = false;
 
         PlayerMovement survivor = activePlayer;
-        PlayerMovement absorbed = (activePlayer == bodyA) ? bodyB : bodyA;
+        PlayerMovement absorbed = inactivePlayer;
 
         survivor.SetActive(true);
-
-
         Destroy(absorbed.gameObject);
 
         bodyA = survivor;
         bodyB = null;
 
         activePlayer = survivor;
+        inactivePlayer = null;
         originalPlayer = survivor;
 
         AttachCameraInstant(activePlayer);

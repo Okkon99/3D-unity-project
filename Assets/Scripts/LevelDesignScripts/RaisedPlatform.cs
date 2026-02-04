@@ -129,17 +129,6 @@ public class RaisedPlatform : MonoBehaviour
         endPoint.gameObject.transform.localScale = platformMesh.localScale;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        collision.gameObject.transform.SetParent(transform.GetChild(1));
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        collision.gameObject.transform.SetParent(null);
-    }
-
-
     private void ApplyChanges()
     {
         if (!pillar || !platformMesh)
@@ -154,6 +143,18 @@ public class RaisedPlatform : MonoBehaviour
 
         platformRoot.localPosition = new Vector3(0f, pillarHeight * 2f, 0f);
     }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        collision.gameObject.transform.SetParent(transform.GetChild(1));
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        collision.gameObject.transform.SetParent(null);
+    }
+
 
     private void Static()
     {
@@ -186,8 +187,6 @@ public class RaisedPlatform : MonoBehaviour
 
         pillar.localScale = new Vector3(pillarWidth, pillarHeight, pillarWidth);
         pillar.localPosition = new Vector3(platformRoot.localPosition.x, pillarHeight, platformRoot.localPosition.z);
-
-
     }
 
     private void TriggerActivated()
@@ -230,13 +229,17 @@ public class RaisedPlatform : MonoBehaviour
                 }
             }
         }
+
+        pillarHeight = platformRoot.transform.localPosition.y / 2f;
+
+        pillar.localScale = new Vector3(pillarWidth, pillarHeight, pillarWidth);
+        pillar.localPosition = new Vector3(platformRoot.localPosition.x, pillarHeight, platformRoot.localPosition.z);
     }
 
     private void PressureSensitive()
     {
-        
+        // fill in later
     }
-
 
 
 

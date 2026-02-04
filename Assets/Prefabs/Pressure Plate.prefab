@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4929261826268553657}
+  - component: {fileID: 8585723036047745790}
+  - component: {fileID: 6631204211120567315}
   m_Layer: 0
   m_Name: Pressure Plate
   m_TagString: Untagged
@@ -32,6 +34,47 @@ Transform:
   - {fileID: 8499906630774546113}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8585723036047745790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2285864084997477504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186b640614ad6704aac9a953db2596be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
+  raisedPlatform: {fileID: 0}
+  gateScript: {fileID: 0}
+--- !u!54 &6631204211120567315
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2285864084997477504}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7142428526222162631
 GameObject:
   m_ObjectHideFlags: 0
@@ -41,7 +84,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8499906630774546113}
-  - component: {fileID: 5498583946624548667}
   - component: {fileID: 2482962871788972234}
   - component: {fileID: 2352301840640224327}
   - component: {fileID: 1669181754209555617}
@@ -67,19 +109,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4929261826268553657}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5498583946624548667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7142428526222162631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 186b640614ad6704aac9a953db2596be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
-  raisedPlatform: {fileID: 0}
 --- !u!33 &2482962871788972234
 MeshFilter:
   m_ObjectHideFlags: 0

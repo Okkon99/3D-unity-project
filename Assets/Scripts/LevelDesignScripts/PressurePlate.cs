@@ -19,5 +19,26 @@ public class PressurePlate : MonoBehaviour
     {
         if (raisedPlatform != null)
             raisedPlatform.OnTriggerActivatePlatform(false);
+
+        if (gateScript != null)
+            gateScript.OnTriggerActivateGate(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (raisedPlatform != null)
+            raisedPlatform.OnTriggerActivatePlatform(true);
+
+        if (gateScript != null)
+            gateScript.OnTriggerActivateGate(true);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (raisedPlatform != null)
+            raisedPlatform.OnTriggerActivatePlatform(false);
+
+        if (gateScript != null)
+            gateScript.OnTriggerActivateGate(false);
     }
 }
