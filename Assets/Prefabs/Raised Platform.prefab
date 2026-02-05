@@ -174,7 +174,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 4, z: 0}
-  m_LocalScale: {x: 3, y: 0.5, z: 3}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6063735929336053108}
@@ -265,7 +265,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 0.5, z: 3}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7626023422419157685}
@@ -399,10 +399,11 @@ MonoBehaviour:
   platformMovement: 1
   pillarHeight: 1
   pillarWidth: 1
-  platformSizeX: 3
-  platformSizeY: 0.5
-  platformSizeZ: 3
-  moveSpeed: 10
+  PlatformSizeX: 5
+  PlatformSizeY: 1
+  PlatformSizeZ: 5
+  extensionMoveSpeed: 2
+  retractionMoveSpeed: 2
   stayTime: 2
   endPoint: {fileID: 429311581022854392}
   triggerMode: 0

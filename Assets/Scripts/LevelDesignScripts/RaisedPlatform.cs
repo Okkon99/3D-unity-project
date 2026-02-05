@@ -15,7 +15,8 @@ public class RaisedPlatform : MonoBehaviour
     [SerializeField] private float PlatformSizeZ = 5f;
 
     [Header("AToB Settings")]
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float extensionMoveSpeed = 2f;
+    [SerializeField] private float retractionMoveSpeed = 2f;
     [SerializeField] private float stayTime = 1f;
     [SerializeField] private Transform endPoint;
 
@@ -39,7 +40,8 @@ public class RaisedPlatform : MonoBehaviour
     {
         HoldToB,
         OneShot,
-        PermanentAToB
+        PermanentAToB,
+        PermanentExtended
     }
 
     private Transform pillar;
@@ -54,12 +56,20 @@ public class RaisedPlatform : MonoBehaviour
 
     private bool triggerActive;
     private bool oneShotRunning;
+    private float moveSpeed;
 
+    private bool permanentlyExtended;
 
+    private void Awake()
+    {
+        CacheChildren();
+        EnsureEndPoint();
+        ApplyChanges();
+    }
 
     private void Start()
     {
-        startPos = platformMesh.position;
+        startPos = platformRoot.position;
         endPoint.GetComponent<MeshRenderer>().enabled = false;
     }
 
@@ -170,6 +180,13 @@ public class RaisedPlatform : MonoBehaviour
 
         Vector3 target = movingToPoint ? endPoint.position : startPos;
 
+        if (target == endPoint.position)
+            moveSpeed = extensionMoveSpeed;
+
+        if (target == startPos)
+            moveSpeed = retractionMoveSpeed;
+
+
         platformRoot.position = Vector3.MoveTowards(platformRoot.position, target, moveSpeed * Time.deltaTime);
 
         if (Vector3.Distance(platformRoot.position, target) < 0.01f)
@@ -198,6 +215,12 @@ public class RaisedPlatform : MonoBehaviour
 
         Vector3 target = movingToPoint ? endPoint.position : startPos;
 
+        if (target == endPoint.position)
+            moveSpeed = extensionMoveSpeed;
+
+        if (target == startPos)
+            moveSpeed = retractionMoveSpeed;
+
         platformRoot.position = Vector3.MoveTowards(platformRoot.position, target, moveSpeed * Time.deltaTime);
 
         if (Vector3.Distance(platformRoot.position, target) < 0.01f)
@@ -225,6 +248,14 @@ public class RaisedPlatform : MonoBehaviour
 
                     case TriggerMode.PermanentAToB:
                         movingToPoint = !movingToPoint;
+                        break;
+
+                    case TriggerMode.PermanentExtended:
+                        if (!permanentlyExtended)
+                        {
+                            permanentlyExtended = true;
+                            movingToPoint = false;
+                        }
                         break;
                 }
             }
@@ -272,6 +303,11 @@ public class RaisedPlatform : MonoBehaviour
 
             case TriggerMode.PermanentAToB:
                 platformMovement = PlatformMovement.AToB;
+                break;
+
+            case TriggerMode.PermanentExtended:
+                permanentlyExtended = true;
+                movingToPoint = true;
                 break;
         }
     }
