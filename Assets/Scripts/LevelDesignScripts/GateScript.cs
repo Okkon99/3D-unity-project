@@ -28,6 +28,13 @@ public class GateScript : MonoBehaviour
 
     private Vector3 startPos;
 
+    private void Awake()
+    {
+        CacheChildren();
+        EnsureEndPoint();
+        ApplyChanges();
+    }
+
     private void Start()
     {
         startPos = gateVisual.position;
