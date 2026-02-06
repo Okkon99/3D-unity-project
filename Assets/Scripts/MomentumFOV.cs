@@ -53,9 +53,4 @@ public class MomentumFOV : MonoBehaviour
     {
         velocitySource = rb;
     }
-
-    public void AddDivideImpulse(float strength01)
-    {
-        impulse += divideImpulseFOV * Mathf.Clamp01(strength01);
-    }
 }

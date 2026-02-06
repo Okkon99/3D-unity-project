@@ -11,8 +11,9 @@ public class PlayerDivideManager : MonoBehaviour
     public PlayerCamera playerCamera;
 
     [Header("Division Settings")]
-    public float recombineRadius;
-    public float suctionMultiplier;
+    public float recollectRadius = 1f;
+    public float suctionMultiplier = 2f;
+    public float divideLaunchVelocity = 20f;
 
     PlayerMovement bodyA;
     PlayerMovement bodyB;
@@ -56,7 +57,7 @@ public class PlayerDivideManager : MonoBehaviour
 
         if (input.Recombine.IsPressed() && isDivided)
         {
-            TryRecombine();
+            TryRecollect();
         }
 
         if (input.Reset.triggered)
@@ -69,21 +70,20 @@ public class PlayerDivideManager : MonoBehaviour
     {
         isDivided = true;
 
-        bodyB = Instantiate(playerPrefab, bodyA.transform.position, bodyA.transform.rotation);
+        bodyB = Instantiate(playerPrefab, bodyA.transform.position - bodyA.transform.forward, bodyA.transform.rotation);
         //bodyB.storedPitch = bodyA.storedPitch;
 
         Physics.IgnoreCollision(bodyA.playerCollider, bodyB.playerCollider, true);
 
         // Momentum split
         Vector3 velocity = bodyA.GetComponent<Rigidbody>().linearVelocity;
-        bodyB.GetComponent<Rigidbody>().linearVelocity = velocity * 2f;
+        bodyB.GetComponent<Rigidbody>().linearVelocity = velocity + (bodyA.transform.forward * (divideLaunchVelocity/2f) + (bodyA.transform.up * divideLaunchVelocity));
         //bodyA.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
 
         var fov = mainCamera.GetComponent<MomentumFOV>();
         if (fov != null)
         {
             float strength = bodyB.GetComponent<Rigidbody>().linearVelocity.magnitude / 10f;
-            fov.AddDivideImpulse(strength);
         }
  
 
@@ -113,25 +113,25 @@ public class PlayerDivideManager : MonoBehaviour
         StartCoroutine(SwapCamera(previousActive, activePlayer));
     }
 
-    void TryRecombine()
+    void TryRecollect()
     {
         float dist = Vector3.Distance(bodyA.transform.position, bodyB.transform.position);
 
-        if (dist <= recombineRadius * suctionMultiplier)
+        if (dist <= recollectRadius * suctionMultiplier)
         {
             inactivePlayer.transform.position = Vector3.MoveTowards(
                 inactivePlayer.transform.position,
                 activePlayer.transform.position,
                 2f * Time.deltaTime
                 );
-            if (dist <= recombineRadius)
+            if (dist <= recollectRadius)
             {
-                Recombine();
+                Recollect();
             }
         }
     }
 
-    void Recombine()
+    void Recollect()
     {
         isDivided = false;
 

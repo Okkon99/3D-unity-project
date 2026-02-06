@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool isGrounded;
     bool wasGrounded;
+    public Vector3 inputDirection;
     Vector3 desiredVelocity;
     Vector2 moveInput;
     bool sprintHeld;
@@ -166,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetDesiredVelocity()
     {
-        Vector3 inputDirection = transform.forward * moveInput.y + transform.right * moveInput.x;
+        inputDirection = transform.forward * moveInput.y + transform.right * moveInput.x;
 
         if (inputDirection.sqrMagnitude > 1f)
         {
