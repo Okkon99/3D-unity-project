@@ -70,14 +70,14 @@ public class PlayerDivideManager : MonoBehaviour
         isDivided = true;
 
         bodyB = Instantiate(playerPrefab, bodyA.transform.position, bodyA.transform.rotation);
-        bodyB.storedPitch = bodyA.storedPitch;
+        //bodyB.storedPitch = bodyA.storedPitch;
 
         Physics.IgnoreCollision(bodyA.playerCollider, bodyB.playerCollider, true);
 
         // Momentum split
         Vector3 velocity = bodyA.GetComponent<Rigidbody>().linearVelocity;
         bodyB.GetComponent<Rigidbody>().linearVelocity = velocity * 2f;
-        bodyA.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        //bodyA.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
 
         var fov = mainCamera.GetComponent<MomentumFOV>();
         if (fov != null)
@@ -87,13 +87,13 @@ public class PlayerDivideManager : MonoBehaviour
         }
  
 
-        bodyA.SetActive(false);
-        bodyB.SetActive(true);
+        bodyA.SetActive(true);
+        bodyB.SetActive(false);
 
-        activePlayer = bodyB;
-        inactivePlayer = bodyA;
+        activePlayer = bodyA;
+        inactivePlayer = bodyB;
 
-        AttachCameraInstant(activePlayer);
+        //AttachCameraInstant(activePlayer);
     }
 
     void SwapBodies()

@@ -32,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Gravity Feel")]
     [SerializeField] float fallGravityMultiplier;
-    [SerializeField] float lowJumpGravityMultiplier;
 
     [Header("Camera State")]
     [SerializeField] public float storedPitch;
@@ -52,9 +51,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveInput;
     bool sprintHeld;
     bool jumpPressed;
-    bool jumpHeld;
     bool canJump;
-    bool isJumping;
     float coyoteTime;
     RaycastHit groundHit;
 
@@ -79,7 +76,6 @@ public class PlayerMovement : MonoBehaviour
         var input = InputManager.instance.Input.Gameplay;
 
         moveInput = input.Move.ReadValue<Vector2>();
-        jumpHeld = input.Jump.IsPressed();
         sprintHeld = input.Sprint.IsPressed();
 
         if (input.Jump.triggered)
@@ -91,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
         
         // CACHE INPUTS END
 
+        // Mouse:
         float mouseX = lookDelta.x * lookSensitivity;
         float mouseY = lookDelta.y * lookSensitivity;
 
@@ -99,12 +96,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        GetDesiredVelocity();
-
-        ApplyAccelVector();
-
-        ApplyFriction();
-
         //Jump
         wasGrounded = isGrounded;                   // wasGrounded = Last frame's isGrounded.
         isGrounded = CheckGrounded(out groundHit);  // isGrounded is now THIS frame's isGrounded.
@@ -116,6 +107,15 @@ public class PlayerMovement : MonoBehaviour
         {
             CoyoteTimeCountdown();
         }
+
+        GetDesiredVelocity();
+
+        ApplyAccelVector();
+
+        //ApplyFriction();
+
+
+
 
         ApplyBetterGravity();
 
@@ -146,13 +146,11 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(Vector3.up * jumpHeight, ForceMode.VelocityChange);
 
         coyoteTime = 0f;
-        isJumping = true;
     }
 
     private void OnLanded()
     {
         ResetCoyoteTime();
-        isJumping = false;
 
         if (rb.linearVelocity.y < 0f)
         {
@@ -162,6 +160,8 @@ public class PlayerMovement : MonoBehaviour
                 rb.linearVelocity.z
             );
         }
+
+        transform.position = new Vector3(transform.position.x, groundHit.point.y+transform.localScale.y, transform.position.z);
     }
 
     private void GetDesiredVelocity()
@@ -188,39 +188,50 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyAccelVector()
     {
-        Vector3 currentVelocity = rb.linearVelocity;
-        Vector3 currentHorizontal = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
-        Vector3 velocityDelta = desiredVelocity - currentHorizontal;
+        Vector3 velocity = rb.linearVelocity;
 
-        float maxAccel = acceleration * Time.fixedDeltaTime;
-        Vector3 accelVector = Vector3.ClampMagnitude(velocityDelta, maxAccel);
-        rb.linearVelocity += accelVector;
+        if (isGrounded)
+        {
+            Vector3 velocityDelta = desiredVelocity - velocity;
+
+            float maxAccel = acceleration * Time.fixedDeltaTime;
+            Vector3 accelVector = Vector3.ClampMagnitude(velocityDelta, maxAccel);
+
+            rb.linearVelocity += accelVector;
+        }
+        else if (isActivePlayer)
+        {
+            Vector3 lateralVelocity = new Vector3(velocity.x, 0f, velocity.z);
+            Vector3 desiredLateral = new Vector3(desiredVelocity.x, 0f, desiredVelocity.z);
+
+            Vector3 airDelta = desiredLateral - lateralVelocity;
+
+            float airControl = acceleration * 0.5f;
+            float maxAirAccel = airControl * Time.fixedDeltaTime;
+
+            Vector3 airAccel = Vector3.ClampMagnitude(airDelta, maxAirAccel);
+
+            rb.linearVelocity += new Vector3(airAccel.x, 0f, airAccel.z);
+        }
     }
 
-    private void ApplyFriction()
-    {
-        Vector3 vel = rb.linearVelocity;
-        float damping = isGrounded ? groundFriction : airFriction;
+    //private void ApplyFriction()
+    //{
+    //    Vector3 vel = rb.linearVelocity;
+    //    float damping = isGrounded ? groundFriction : airFriction;
 
-        vel.x *= 1f - damping * Time.fixedDeltaTime;
-        vel.z *= 1f - damping * Time.fixedDeltaTime;
+    //    vel.x *= 1f - damping * Time.fixedDeltaTime;
+    //    vel.z *= 1f - damping * Time.fixedDeltaTime;
 
-        rb.linearVelocity = new Vector3(vel.x, rb.linearVelocity.y, vel.z);
-    }
+    //    rb.linearVelocity = new Vector3(vel.x, rb.linearVelocity.y, vel.z);
+    //}
 
     private void ApplyBetterGravity()
     {
-        if (rb.linearVelocity.y < 0f)
+        if (!isGrounded)
         {
             rb.AddForce(
                 Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1f),
-                ForceMode.Acceleration
-            );
-        }
-        else if (rb.linearVelocity.y > 0f && !jumpHeld)
-        {
-            rb.AddForce(
-                Vector3.up * Physics.gravity.y * (lowJumpGravityMultiplier - 1f),
                 ForceMode.Acceleration
             );
         }
@@ -249,6 +260,36 @@ public class PlayerMovement : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(bottom, radius);
+
+
+        ////
+
+
+        Vector3 velocity = rb.linearVelocity;
+
+        if (isGrounded)
+        {
+            Vector3 velocityDelta = desiredVelocity - velocity;
+
+            float maxAccel = acceleration * Time.fixedDeltaTime;
+            Vector3 accelVector = Vector3.ClampMagnitude(velocityDelta, maxAccel);
+            Gizmos.DrawLine(transform.position, rb.linearVelocity + transform.position);
+        }
+        else
+        {
+            Vector3 lateralVelocity = new Vector3(velocity.x, 0f, velocity.z);
+            Vector3 desiredLateral = new Vector3(desiredVelocity.x, 0f, desiredVelocity.z);
+
+            Vector3 airDelta = desiredLateral - lateralVelocity;
+
+            float airControl = acceleration * 0.5f;
+            float maxAirAccel = airControl * Time.fixedDeltaTime;
+
+            Vector3 airAccel = Vector3.ClampMagnitude(airDelta, maxAirAccel);
+
+            Gizmos.DrawLine(transform.position, rb.linearVelocity + transform.position);
+        }
+
     }
 
 
@@ -267,10 +308,9 @@ public class PlayerMovement : MonoBehaviour
         {
             moveInput = Vector2.zero;
             jumpPressed = false;
-            jumpHeld = false;
             sprintHeld = false;
 
-            rb.linearVelocity = Vector3.zero;
+            //rb.linearVelocity = Vector3.zero;
         }
     }
 }
