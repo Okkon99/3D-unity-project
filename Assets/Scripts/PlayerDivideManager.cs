@@ -18,7 +18,7 @@ public class PlayerDivideManager : MonoBehaviour
     PlayerMovement bodyA;
     PlayerMovement bodyB;
 
-    bool isDivided;
+    bool isDeployed;
 
     public PlayerMovement activePlayer;
     public PlayerMovement inactivePlayer;
@@ -38,6 +38,8 @@ public class PlayerDivideManager : MonoBehaviour
         activePlayer = bodyA;
         inactivePlayer = null;
 
+
+
         AttachCameraInstant(activePlayer);
     }
 
@@ -45,9 +47,9 @@ public class PlayerDivideManager : MonoBehaviour
     {
         var input = InputManager.instance.Input.Gameplay;
 
-        if (input.Divide.triggered && !isDivided)
+        if (input.Deploy.triggered && !isDeployed)
         {
-            Divide();
+            Deploy();
         }
 
         if (input.Swap.triggered && bodyA != null && bodyB != null)
@@ -55,7 +57,7 @@ public class PlayerDivideManager : MonoBehaviour
             SwapBodies();
         }
 
-        if (input.Recombine.IsPressed() && isDivided)
+        if (input.Recombine.IsPressed() && isDeployed)
         {
             TryRecollect();
         }
@@ -66,19 +68,18 @@ public class PlayerDivideManager : MonoBehaviour
         }
     }
 
-    void Divide()
+    void Deploy()
     {
-        isDivided = true;
+        isDeployed = true;
 
         bodyB = Instantiate(playerPrefab, bodyA.transform.position - bodyA.transform.forward, bodyA.transform.rotation);
         //bodyB.storedPitch = bodyA.storedPitch;
 
         Physics.IgnoreCollision(bodyA.playerCollider, bodyB.playerCollider, true);
 
-        // Momentum split
+        // Momentum at deploy set:
         Vector3 velocity = bodyA.GetComponent<Rigidbody>().linearVelocity;
-        bodyB.GetComponent<Rigidbody>().linearVelocity = velocity + (bodyA.transform.forward * (divideLaunchVelocity/2f) + (bodyA.transform.up * divideLaunchVelocity));
-        //bodyA.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        bodyB.GetComponent<Rigidbody>().linearVelocity = (velocity / 3f) + (bodyA.transform.forward * (divideLaunchVelocity/4f) + (bodyA.transform.up * divideLaunchVelocity));
 
         var fov = mainCamera.GetComponent<MomentumFOV>();
         if (fov != null)
@@ -93,7 +94,7 @@ public class PlayerDivideManager : MonoBehaviour
         activePlayer = bodyA;
         inactivePlayer = bodyB;
 
-        //AttachCameraInstant(activePlayer);
+        //AttachCameraInstant(activePlayer); //only needed if bodyB is active at Deploy, probably wont be
     }
 
     void SwapBodies()
@@ -131,9 +132,9 @@ public class PlayerDivideManager : MonoBehaviour
         }
     }
 
-    void Recollect()
+    public void Recollect()
     {
-        isDivided = false;
+        isDeployed = false;
 
         PlayerMovement survivor = activePlayer;
         PlayerMovement absorbed = inactivePlayer;

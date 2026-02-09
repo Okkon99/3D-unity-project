@@ -34,7 +34,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Divide",
+                    "name": "Deploy",
                     "type": "Button",
                     "id": "0d552b96-d18f-4fcc-b6cc-764a82bf4f29",
                     "expectedControlType": "",
@@ -131,7 +131,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";MKB",
-                    "action": "Divide",
+                    "action": "Deploy",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -142,7 +142,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Controllers",
-                    "action": "Divide",
+                    "action": "Deploy",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -43,7 +43,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private InputManager inputManager;
     [SerializeField] public Transform cameraAnchor;
-
+    [SerializeField] public Collider backpackHitbox;
+    [SerializeField] private float velocity; //debug line
 
     bool isGrounded;
     bool wasGrounded;
@@ -68,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        velocity = rb.linearVelocity.magnitude; //debug line
         if (!isActivePlayer)
         {
             return;
@@ -200,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.linearVelocity += accelVector;
         }
-        else if (isActivePlayer)
+        else if (isActivePlayer && (velocity.magnitude < 10f))
         {
             Vector3 lateralVelocity = new Vector3(velocity.x, 0f, velocity.z);
             Vector3 desiredLateral = new Vector3(desiredVelocity.x, 0f, desiredVelocity.z);
