@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Unity.VectorGraphics;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,6 +37,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Camera State")]
     [SerializeField] public float storedPitch;
 
+    [Header("Backpack settings")]
+    [SerializeField] public float deployLaunchVelocity = 15f;
+
 
     [Header("Dependencies")]
     [SerializeField] private Rigidbody rb;
@@ -43,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private InputManager inputManager;
     [SerializeField] public Transform cameraAnchor;
-    [SerializeField] public Collider backpackHitbox;
+    [SerializeField] public PlayerBackpack backpack;
     [SerializeField] private float velocity; //debug line
 
     bool isGrounded;
@@ -95,6 +99,11 @@ public class PlayerMovement : MonoBehaviour
         float mouseY = lookDelta.y * lookSensitivity;
 
         transform.Rotate(Vector3.up * mouseX);
+
+        if (input.Deploy.triggered)
+        {
+            backpack.Deploy((rb.linearVelocity / 3f) + (transform.forward * (deployLaunchVelocity / 4f) + (transform.up * deployLaunchVelocity)));
+        }
     }
 
     private void FixedUpdate()
@@ -129,6 +138,17 @@ public class PlayerMovement : MonoBehaviour
             Jump();
         }
         jumpPressed = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<PlayerMovement>(out var otherPlayer))
+        {
+            if (otherPlayer != this)
+            {
+                backpack.TryInsert(otherPlayer.gameObject);
+            }
+        }
     }
 
 

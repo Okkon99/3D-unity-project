@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4687554678250777950}
   - component: {fileID: 5783244241393792667}
   m_Layer: 0
-  m_Name: BackpackHitbox
+  m_Name: BackpackAnchor
   m_TagString: BackpackHitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,6 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7841192785353025827}
   - component: {fileID: 7083254395214352673}
+  - component: {fileID: 7178351173754635844}
   - component: {fileID: 2907521800970142815}
   - component: {fileID: 6940822998859806502}
   - component: {fileID: 5448236815458903567}
@@ -282,6 +283,19 @@ MonoBehaviour:
   backpackHitbox: {fileID: 5783244241393792667}
   velocity: 0
   inputDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &7178351173754635844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7995813620417342588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393adab27bcdaee48abdbe01033c36c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBackpack
+  backpackAnchor: {fileID: 4687554678250777950}
 --- !u!114 &2907521800970142815
 MonoBehaviour:
   m_ObjectHideFlags: 0
