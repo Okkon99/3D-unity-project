@@ -1,44 +1,51 @@
 using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerDivideManager : MonoBehaviour
 {
     [Header("References")]
-    public PlayerMovement playerPrefab;
-    public PlayerMovement originalPlayer;
-    public PlayerCamera playerCamera;
+    [SerializeField] PlayerMovement player1;
+    [SerializeField] PlayerMovement player2;
+    [SerializeField] PlayerCamera playerCamera;
 
-    [Header("Division Settings")]
-    public float recollectRadius = 1f;
-    public float suctionMultiplier = 2f;
-    public float divideLaunchVelocity = 20f;
-
-    PlayerMovement bodyA;
-    PlayerMovement bodyB;
-
-    bool isDeployed;
-
-    public PlayerMovement activePlayer;
-    public PlayerMovement inactivePlayer;
-
-    public PlayerMovement ActivePlayer => activePlayer;
+    [Header("Backpacking")]
+    [SerializeField] float deployLaunchVelocity = 12f;
+    [SerializeField] float collisionRestoreDistance = 1.4f;
 
     [Header("Camera")]
     [SerializeField] Camera mainCamera;
     [SerializeField] Vector3 cameraLocalOffset;
     [SerializeField] float swapCameraDuration = 0.25f;
     [SerializeField] AnimationCurve swapCameraCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    PlayerMovement bodyA;
+    PlayerMovement bodyB;
+
+    public PlayerMovement activePlayer;
+    public PlayerMovement inactivePlayer;
+
+    public PlayerMovement ActivePlayer => activePlayer;
+
     bool isCameraTransitioning;
+
+    BackpackState backpackedState;
+    readonly List<CollisionRestoreRequest> pendingCollisionRestore = new();
 
     void Start()
     {
-        bodyA = originalPlayer;
+        bodyA = player1;
+        bodyB = player2;
+
         activePlayer = bodyA;
-        inactivePlayer = null;
+        inactivePlayer = bodyB;
 
+        activePlayer.SetActive(true);
+        inactivePlayer.SetActive(false);
 
+        RegisterBackpackTrigger(bodyA);
+        RegisterBackpackTrigger(bodyB);
 
         AttachCameraInstant(activePlayer);
     }
@@ -47,54 +54,184 @@ public class PlayerDivideManager : MonoBehaviour
     {
         var input = InputManager.instance.Input.Gameplay;
 
-        if (input.Deploy.triggered && !isDeployed)
-        {
-            Deploy();
-        }
-
         if (input.Swap.triggered && bodyA != null && bodyB != null)
         {
             SwapBodies();
         }
 
-        if (input.Recombine.IsPressed() && isDeployed)
+        if (input.Deploy.triggered)
         {
-            TryRecollect();
+            DeployBackpacked();
         }
 
         if (input.Reset.triggered)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+        ProcessPendingCollisionRestore();
     }
 
-    void Deploy()
+    void RegisterBackpackTrigger(PlayerMovement player)
     {
-        isDeployed = true;
-
-        bodyB = Instantiate(playerPrefab, bodyA.transform.position - bodyA.transform.forward, bodyA.transform.rotation);
-        //bodyB.storedPitch = bodyA.storedPitch;
-
-        Physics.IgnoreCollision(bodyA.playerCollider, bodyB.playerCollider, true);
-
-        // Momentum at deploy set:
-        Vector3 velocity = bodyA.GetComponent<Rigidbody>().linearVelocity;
-        bodyB.GetComponent<Rigidbody>().linearVelocity = (velocity / 3f) + (bodyA.transform.forward * (divideLaunchVelocity/4f) + (bodyA.transform.up * divideLaunchVelocity));
-
-        var fov = mainCamera.GetComponent<MomentumFOV>();
-        if (fov != null)
+        if (player == null || player.backpackHitbox == null)
         {
-            float strength = bodyB.GetComponent<Rigidbody>().linearVelocity.magnitude / 10f;
+            return;
         }
- 
 
-        bodyA.SetActive(true);
-        bodyB.SetActive(false);
+        BackpackTrigger trigger = player.backpackHitbox.GetComponent<BackpackTrigger>();
+        if (trigger == null)
+        {
+            trigger = player.backpackHitbox.gameObject.AddComponent<BackpackTrigger>();
+        }
 
-        activePlayer = bodyA;
-        inactivePlayer = bodyB;
+        trigger.Initialize(this, player);
+    }
 
-        //AttachCameraInstant(activePlayer); //only needed if bodyB is active at Deploy, probably wont be
+    public void NotifyBackpackTrigger(PlayerMovement carrier, Collider other)
+    {
+        if (carrier == null || other == null)
+        {
+            return;
+        }
+
+        Rigidbody subjectBody = other.attachedRigidbody;
+        if (subjectBody == null)
+        {
+            return;
+        }
+
+        if (backpackedState != null)
+        {
+            return;
+        }
+
+        PlayerMovement subjectPlayer = subjectBody.GetComponent<PlayerMovement>();
+
+        if (subjectPlayer == carrier)
+        {
+            return;
+        }
+
+        if (!CanBeBackpacked(subjectBody, subjectPlayer))
+        {
+            return;
+        }
+
+        if (subjectBody.linearVelocity.y >= 0f)
+        {
+            return;
+        }
+
+        Backpack(carrier, subjectBody, subjectPlayer);
+    }
+
+    bool CanBeBackpacked(Rigidbody subjectBody, PlayerMovement subjectPlayer)
+    {
+        if (subjectPlayer != null)
+        {
+            return subjectPlayer.canBeBackpacked;
+        }
+
+        Backpackable backpackable = subjectBody.GetComponent<Backpackable>();
+        return backpackable != null && backpackable.canBeBackpacked;
+    }
+
+    void Backpack(PlayerMovement carrier, Rigidbody subjectBody, PlayerMovement subjectPlayer)
+    {
+        Transform backpackAnchor = carrier.backpackHitbox.transform;
+
+        subjectBody.transform.SetParent(backpackAnchor);
+        subjectBody.transform.localPosition = Vector3.zero;
+        subjectBody.transform.localRotation = Quaternion.identity;
+
+        subjectBody.linearVelocity = Vector3.zero;
+        subjectBody.angularVelocity = Vector3.zero;
+        subjectBody.isKinematic = true;
+
+        if (subjectPlayer != null)
+        {
+            subjectPlayer.SetActive(false);
+        }
+
+        Collider[] subjectColliders = subjectBody.GetComponentsInChildren<Collider>();
+        foreach (Collider col in subjectColliders)
+        {
+            if (col == null || carrier.playerCollider == null)
+            {
+                continue;
+            }
+
+            Physics.IgnoreCollision(carrier.playerCollider, col, true);
+        }
+
+        backpackedState = new BackpackState
+        {
+            carrier = carrier,
+            subjectBody = subjectBody,
+            subjectPlayer = subjectPlayer,
+            ignoredColliders = subjectColliders
+        };
+    }
+
+    void DeployBackpacked()
+    {
+        if (backpackedState == null)
+        {
+            return;
+        }
+
+        BackpackState state = backpackedState;
+        backpackedState = null;
+
+        state.subjectBody.transform.SetParent(null);
+        state.subjectBody.isKinematic = false;
+
+        Vector3 launchDirection = state.carrier.transform.forward + Vector3.up * 0.25f;
+        state.subjectBody.linearVelocity = state.carrier.GetComponent<Rigidbody>().linearVelocity + launchDirection.normalized * deployLaunchVelocity;
+
+        if (state.subjectPlayer != null)
+        {
+            state.subjectPlayer.SetActive(false);
+        }
+
+        pendingCollisionRestore.Add(new CollisionRestoreRequest
+        {
+            carrier = state.carrier,
+            subjectBody = state.subjectBody,
+            ignoredColliders = state.ignoredColliders
+        });
+    }
+
+    void ProcessPendingCollisionRestore()
+    {
+        for (int i = pendingCollisionRestore.Count - 1; i >= 0; i--)
+        {
+            CollisionRestoreRequest request = pendingCollisionRestore[i];
+            if (request.carrier == null || request.subjectBody == null)
+            {
+                pendingCollisionRestore.RemoveAt(i);
+                continue;
+            }
+
+            float distance = Vector3.Distance(request.carrier.transform.position, request.subjectBody.position);
+            if (distance < collisionRestoreDistance)
+            {
+                continue;
+            }
+
+            foreach (Collider collider in request.ignoredColliders)
+            {
+                if (collider == null || request.carrier.playerCollider == null)
+                {
+                    continue;
+                }
+
+                Physics.IgnoreCollision(request.carrier.playerCollider, collider, false);
+            }
+
+            pendingCollisionRestore.RemoveAt(i);
+        }
     }
 
     void SwapBodies()
@@ -114,48 +251,6 @@ public class PlayerDivideManager : MonoBehaviour
         StartCoroutine(SwapCamera(previousActive, activePlayer));
     }
 
-    void TryRecollect()
-    {
-        float dist = Vector3.Distance(bodyA.transform.position, bodyB.transform.position);
-
-        if (dist <= recollectRadius * suctionMultiplier)
-        {
-            inactivePlayer.transform.position = Vector3.MoveTowards(
-                inactivePlayer.transform.position,
-                activePlayer.transform.position,
-                2f * Time.deltaTime
-                );
-            if (dist <= recollectRadius)
-            {
-                Recollect();
-            }
-        }
-    }
-
-    public void Recollect()
-    {
-        isDeployed = false;
-
-        PlayerMovement survivor = activePlayer;
-        PlayerMovement absorbed = inactivePlayer;
-
-        survivor.SetActive(true);
-        Destroy(absorbed.gameObject);
-
-        bodyA = survivor;
-        bodyB = null;
-
-        activePlayer = survivor;
-        inactivePlayer = null;
-        originalPlayer = survivor;
-
-        AttachCameraInstant(activePlayer);
-    }
-
-
-
-    //Camera stuff
-
     void AttachCameraInstant(PlayerMovement player)
     {
         mainCamera.transform.SetParent(player.cameraAnchor);
@@ -170,7 +265,6 @@ public class PlayerDivideManager : MonoBehaviour
             fov.SetVelocitySource(player.GetComponent<Rigidbody>());
         }
     }
-
 
     IEnumerator SwapCamera(PlayerMovement from, PlayerMovement to)
     {
@@ -212,6 +306,23 @@ public class PlayerDivideManager : MonoBehaviour
 
         var fov = mainCamera.GetComponent<MomentumFOV>();
         if (fov != null)
+        {
             fov.SetVelocitySource(to.GetComponent<Rigidbody>());
+        }
+    }
+
+    class BackpackState
+    {
+        public PlayerMovement carrier;
+        public Rigidbody subjectBody;
+        public PlayerMovement subjectPlayer;
+        public Collider[] ignoredColliders;
+    }
+
+    class CollisionRestoreRequest
+    {
+        public PlayerMovement carrier;
+        public Rigidbody subjectBody;
+        public Collider[] ignoredColliders;
     }
 }

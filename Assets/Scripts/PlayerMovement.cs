@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Division State")]
     public bool isActivePlayer = true;
+    public bool canBeBackpacked = true;
 
     [Header("Player Settings")]
     [Header("")]
