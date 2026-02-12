@@ -147,7 +147,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Recombine"",
+                    ""name"": ""Augment"",
                     ""type"": ""Button"",
                     ""id"": ""e6c379c3-1c5d-4449-91fa-bef213120696"",
                     ""expectedControlType"": """",
@@ -270,7 +270,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";MKB"",
-                    ""action"": ""Recombine"",
+                    ""action"": ""Augment"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -281,7 +281,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Controllers"",
-                    ""action"": ""Recombine"",
+                    ""action"": ""Augment"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -491,7 +491,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Gameplay_Deploy = m_Gameplay.FindAction("Deploy", throwIfNotFound: true);
         m_Gameplay_Swap = m_Gameplay.FindAction("Swap", throwIfNotFound: true);
         m_Gameplay_Grab = m_Gameplay.FindAction("Grab", throwIfNotFound: true);
-        m_Gameplay_Recombine = m_Gameplay.FindAction("Recombine", throwIfNotFound: true);
+        m_Gameplay_Augment = m_Gameplay.FindAction("Augment", throwIfNotFound: true);
         m_Gameplay_Reset = m_Gameplay.FindAction("Reset", throwIfNotFound: true);
         m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
     }
@@ -580,7 +580,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Deploy;
     private readonly InputAction m_Gameplay_Swap;
     private readonly InputAction m_Gameplay_Grab;
-    private readonly InputAction m_Gameplay_Recombine;
+    private readonly InputAction m_Gameplay_Augment;
     private readonly InputAction m_Gameplay_Reset;
     private readonly InputAction m_Gameplay_Look;
     /// <summary>
@@ -619,9 +619,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Grab => m_Wrapper.m_Gameplay_Grab;
         /// <summary>
-        /// Provides access to the underlying input action "Gameplay/Recombine".
+        /// Provides access to the underlying input action "Gameplay/Augment".
         /// </summary>
-        public InputAction @Recombine => m_Wrapper.m_Gameplay_Recombine;
+        public InputAction @Augment => m_Wrapper.m_Gameplay_Augment;
         /// <summary>
         /// Provides access to the underlying input action "Gameplay/Reset".
         /// </summary>
@@ -674,9 +674,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Grab.started += instance.OnGrab;
             @Grab.performed += instance.OnGrab;
             @Grab.canceled += instance.OnGrab;
-            @Recombine.started += instance.OnRecombine;
-            @Recombine.performed += instance.OnRecombine;
-            @Recombine.canceled += instance.OnRecombine;
+            @Augment.started += instance.OnAugment;
+            @Augment.performed += instance.OnAugment;
+            @Augment.canceled += instance.OnAugment;
             @Reset.started += instance.OnReset;
             @Reset.performed += instance.OnReset;
             @Reset.canceled += instance.OnReset;
@@ -712,9 +712,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Grab.started -= instance.OnGrab;
             @Grab.performed -= instance.OnGrab;
             @Grab.canceled -= instance.OnGrab;
-            @Recombine.started -= instance.OnRecombine;
-            @Recombine.performed -= instance.OnRecombine;
-            @Recombine.canceled -= instance.OnRecombine;
+            @Augment.started -= instance.OnAugment;
+            @Augment.performed -= instance.OnAugment;
+            @Augment.canceled -= instance.OnAugment;
             @Reset.started -= instance.OnReset;
             @Reset.performed -= instance.OnReset;
             @Reset.canceled -= instance.OnReset;
@@ -830,12 +830,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnGrab(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Recombine" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Augment" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRecombine(InputAction.CallbackContext context);
+        void OnAugment(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Reset" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

@@ -61,7 +61,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Recombine",
+                    "name": "Augment",
                     "type": "Button",
                     "id": "e6c379c3-1c5d-4449-91fa-bef213120696",
                     "expectedControlType": "",
@@ -184,7 +184,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";MKB",
-                    "action": "Recombine",
+                    "action": "Augment",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -195,7 +195,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Controllers",
-                    "action": "Recombine",
+                    "action": "Augment",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
