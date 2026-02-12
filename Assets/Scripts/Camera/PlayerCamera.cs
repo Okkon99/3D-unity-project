@@ -4,22 +4,22 @@ using UnityEngine.Windows;
 public class PlayerCamera : MonoBehaviour
 {
     public float pitch;
-    private PlayerDivideManager divideManager;
+    private PlayerPairManager pairManager;
     public Transform currentAnchor { get; private set; }
 
     private void Awake()
     {
-        divideManager = FindFirstObjectByType<PlayerDivideManager>();
+        pairManager = FindFirstObjectByType<PlayerPairManager>();
     }
 
     private void Update()
     {
-        if (divideManager == null)
+        if (pairManager == null)
         {
             return;
         }
 
-        PlayerMovement activePlayer = divideManager.activePlayer;
+        PlayerMovement activePlayer = pairManager.activePlayer;
         if (activePlayer == null || !activePlayer.isActivePlayer)
         {
             return;

@@ -3,10 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class OnContactDeath : MonoBehaviour
 {
-    [SerializeField] float number;
-
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (other.CompareTag("Player"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }

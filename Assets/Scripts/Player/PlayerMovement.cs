@@ -1,8 +1,5 @@
-using System.Text.RegularExpressions;
-using Unity.VectorGraphics;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -63,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
     //debug stuff
     Vector3 startPos;
+
 
     void Start()
     {
@@ -129,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        ApplyBetterGravity();
+        //ApplyBetterGravity(); obsolete potentially, staying as a reminder just in case i do want it back.
 
         canJump = isGrounded || coyoteTime > 0f;
 
@@ -140,16 +138,6 @@ public class PlayerMovement : MonoBehaviour
         jumpPressed = false;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent<PlayerMovement>(out var otherPlayer))
-        {
-            if (otherPlayer != this)
-            {
-                backpack.TryInsert(otherPlayer.gameObject);
-            }
-        }
-    }
 
 
 
@@ -315,10 +303,6 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-
-
-    // Divide methods
-
     public void SetActive(bool active)
     {
         isActivePlayer = active;
@@ -332,8 +316,6 @@ public class PlayerMovement : MonoBehaviour
             moveInput = Vector2.zero;
             jumpPressed = false;
             sprintHeld = false;
-
-            //rb.linearVelocity = Vector3.zero;
         }
     }
 }
