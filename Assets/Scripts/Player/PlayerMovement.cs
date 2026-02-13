@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     bool canJump;
     float coyoteTime;
     RaycastHit groundHit;
+    AugmentBase equippedAugment;
 
     //debug stuff
     Vector3 startPos;
@@ -86,6 +87,11 @@ public class PlayerMovement : MonoBehaviour
         if (input.Jump.triggered)
         {
             jumpPressed = true;
+        }
+
+        if (input.Augment.triggered)
+        {
+            equippedAugment.Toggle();
         }
 
         Vector2 lookDelta = input.Look.ReadValue<Vector2>();
@@ -317,5 +323,20 @@ public class PlayerMovement : MonoBehaviour
             jumpPressed = false;
             sprintHeld = false;
         }
+    }
+
+
+    public void EquipAugment(AugmentBase augment)
+    {
+        equippedAugment = augment;
+        equippedAugment.OnEquipped(this);
+    }
+
+    public void UnequipAugment()
+    {
+        if (equippedAugment != null)
+            equippedAugment.OnUnequipped();
+
+        equippedAugment = null;
     }
 }

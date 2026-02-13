@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerBackpack : MonoBehaviour
@@ -23,6 +24,13 @@ public class PlayerBackpack : MonoBehaviour
         currentItem = item;
         item.OnEnterBackpack(backpackAnchor);
 
+        var augment = item.GetComponent<AugmentBase>();
+        if (augment != null)
+        {
+            var owner = GetComponent<PlayerMovement>();
+            owner.EquipAugment(augment);
+        }
+
         var movement = item.GetComponent<PlayerMovement>();
         if (movement != null)
         {
@@ -35,6 +43,13 @@ public class PlayerBackpack : MonoBehaviour
     public void Deploy(Vector3 force)
     {
         if (!IsOccupied) return;
+
+        var augment = currentItem.GetComponent<AugmentBase>();
+        if (augment != null)
+        {
+            var owner = GetComponent<PlayerMovement>();
+            owner.UnequipAugment();
+        }
 
         currentItem.OnExitBackpack(force);
         currentItem = null;

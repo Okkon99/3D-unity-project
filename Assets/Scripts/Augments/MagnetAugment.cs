@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MagnetAugment : MonoBehaviour
+public class MagnetAugment : AugmentBase
 {
     [Header("Magnet Settings")]
     [SerializeField] private float magnetRadius = 5f;
@@ -10,43 +9,34 @@ public class MagnetAugment : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform magnetCenter;
 
-    private bool magnetActive = false;
-    private List<Rigidbody> objectsBeingPulled = new List<Rigidbody>();
 
-    private void Update()
-    {
-        if (InputManager.instance.Input.Gameplay.Augment.triggered)
-        {
-            magnetActive = !magnetActive;
-        }
-    }
 
     private void FixedUpdate()
     {
-        if (magnetActive)
-        {
-            PullObjects();
-        }
+        if (!isActive || owner == null)
+            return;
+        
+        PullObjects();
     }
 
     private void PullObjects()
     {
         Collider[] colliders = Physics.OverlapSphere(magnetCenter.position, magnetRadius);
 
-        objectsBeingPulled.Clear();
-
         foreach (var col in colliders)
         {
-            if (col.TryGetComponent<Rigidbody>(out var rb))
-            {
-                if (rb.isKinematic || rb.gameObject == this.gameObject)
-                    continue;
+            if (!col.TryGetComponent<Rigidbody>(out var rb))
+                continue;
+            
+            if (rb.isKinematic)
+                continue;
 
-                objectsBeingPulled.Add(rb);
+            if (rb.GetComponent<PlayerMovement>())
+                continue;
 
-                Vector3 direction = (magnetCenter.position - rb.position).normalized;
-                rb.AddForce(direction * pullStrength * Time.deltaTime, ForceMode.VelocityChange);
-            }
+            Vector3 direction = (magnetCenter.position - rb.position).normalized;
+            rb.AddForce(direction * pullStrength, ForceMode.Acceleration);
+
         }
     }
 

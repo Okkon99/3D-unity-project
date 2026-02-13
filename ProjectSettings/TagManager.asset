@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Grabbable
   - BackpackHitbox
+  - Deathbox
   layers:
   - Default
   - TransparentFX
