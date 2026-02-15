@@ -19,7 +19,7 @@ public class PlayerBackpack : MonoBehaviour
     {
         if (IsOccupied) return false;
         if (!item.CanEnterBackpack()) return false;
-        if (item.rb.linearVelocity.y > -0.1f) return false;
+        if (item.rb.linearVelocity.y > -1f) return false;
 
         currentItem = item;
         item.OnEnterBackpack(backpackAnchor);

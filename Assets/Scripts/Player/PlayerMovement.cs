@@ -106,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.Deploy.triggered)
         {
-            backpack.Deploy((rb.linearVelocity / 3f) + (transform.forward * (deployLaunchVelocity / 4f) + (transform.up * deployLaunchVelocity)));
+            backpack.Deploy(transform.forward * (deployLaunchVelocity / 4f) + (transform.up * deployLaunchVelocity));
         }
     }
 

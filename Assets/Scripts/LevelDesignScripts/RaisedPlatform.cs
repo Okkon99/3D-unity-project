@@ -6,6 +6,8 @@ public class RaisedPlatform : MonoBehaviour
 {
     [Header("Platform Behaviour")]
     [SerializeField] private PlatformMovement platformMovement;
+    [Header("Trigger Settings")]
+    [SerializeField] private TriggerMode triggerMode;
     [Header("Pillar")]
     [SerializeField] private float pillarHeight = 5f;
     [SerializeField] private float pillarWidth = 1f;
@@ -20,8 +22,7 @@ public class RaisedPlatform : MonoBehaviour
     [SerializeField] private float stayTime = 1f;
     [SerializeField] private Transform endPoint;
 
-    [Header("Trigger Settings")]
-    [SerializeField] private TriggerMode triggerMode;
+
 
 
 

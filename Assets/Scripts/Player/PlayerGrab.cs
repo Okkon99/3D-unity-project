@@ -15,7 +15,6 @@ public class PlayerGrab : MonoBehaviour
     bool isHolding;
 
 
-
     void Update()
     {
         if (!GetComponent<PlayerMovement>().isActivePlayer)
@@ -54,7 +53,14 @@ public class PlayerGrab : MonoBehaviour
             return;
 
         if (!hit.collider.CompareTag("Grabbable"))
+        {
             return;
+        }
+
+        if (hit.collider.TryGetComponent<ButtonScript>(out ButtonScript button))
+        {
+            button.OnButtonPressed();
+        }
 
         Rigidbody rb = hit.collider.attachedRigidbody;
         if (rb == null)

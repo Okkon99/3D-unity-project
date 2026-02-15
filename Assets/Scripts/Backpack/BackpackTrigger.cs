@@ -12,7 +12,7 @@ public class BackpackTrigger : MonoBehaviour
         playerMovement = GetComponentInParent<PlayerMovement>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.TryGetComponent<IsBackpackable>(out var item))
         {
