@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6762232203369192202}
   - component: {fileID: 7184324105727537422}
   - component: {fileID: 5650093313448032850}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Button
   m_TagString: Grabbable
   m_Icon: {fileID: 0}
@@ -50,9 +50,13 @@ MonoBehaviour:
   raisedPlatform: {fileID: 0}
   raisedPlatform2: {fileID: 0}
   raisedPlatform3: {fileID: 0}
+  raisedPlatform4: {fileID: 0}
+  raisedPlatform5: {fileID: 0}
   gateScript: {fileID: 0}
   gateScript2: {fileID: 0}
   gateScript3: {fileID: 0}
+  gateScript4: {fileID: 0}
+  gateScript5: {fileID: 0}
   meshPath: {fileID: 5650093313448032850}
   PressedMaterial: {fileID: 2100000, guid: 35e20f82c095a874f84351741f3074e7, type: 2}
 --- !u!64 &6762232203369192202

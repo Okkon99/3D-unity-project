@@ -61,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
     //debug stuff
     Vector3 startPos;
+    Vector3 tempInputDir;
 
 
     void Start()
@@ -200,6 +201,8 @@ public class PlayerMovement : MonoBehaviour
             }
             inputDirection = Vector3.ProjectOnPlane(inputDirection, groundHit.normal).normalized;
         }
+        tempInputDir = inputDirection;
+        inputDirection = RemoveWallPush(inputDirection);
         desiredVelocity = inputDirection * speed;
     }
 
@@ -232,16 +235,26 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //private void ApplyFriction()
-    //{
-    //    Vector3 vel = rb.linearVelocity;
-    //    float damping = isGrounded ? groundFriction : airFriction;
+    private Vector3 RemoveWallPush(Vector3 direction)
+    {
+        float checkDistance = 0.6f;
 
-    //    vel.x *= 1f - damping * Time.fixedDeltaTime;
-    //    vel.z *= 1f - damping * Time.fixedDeltaTime;
+        if (Physics.SphereCast(
+            playerCollider.bounds.center,
+            playerCollider.radius * 0.9f,
+            direction,
+            out RaycastHit hit,
+            checkDistance,
+            floorLayer,
+            QueryTriggerInteraction.Ignore))
+        {
+            // Remove component pushing into the wall
+            direction = Vector3.ProjectOnPlane(direction, hit.normal);
+        }
 
-    //    rb.linearVelocity = new Vector3(vel.x, rb.linearVelocity.y, vel.z);
-    //}
+        return direction;
+    }
+
 
     private void ApplyBetterGravity()
     {

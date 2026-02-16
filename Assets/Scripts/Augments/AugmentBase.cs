@@ -36,7 +36,7 @@ public abstract class AugmentBase : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        transform.position = new Vector3(startPosition.x, startPosition.y - 2f, startPosition.z);
+        transform.position = new Vector3(startPosition.x, startPosition.y - 1f, startPosition.z);
         transform.rotation = startRotation;
 
         gameObject.SetActive(true);

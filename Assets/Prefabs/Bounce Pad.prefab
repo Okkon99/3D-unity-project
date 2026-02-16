@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5893541070765187915}
   - component: {fileID: 4077747830217441081}
   - component: {fileID: 8571116167244129552}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bounce Pad Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 9199126093108788742}
   - component: {fileID: 2022236865276292737}
   - component: {fileID: 1864926785844801717}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bounce Pad
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1316974406664090149}
   - component: {fileID: 3682361515568784355}
   - component: {fileID: 6506357694399317297}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Magnet Augment
   m_TagString: Grabbable
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 1471543838763909222}
   - component: {fileID: 8414837482944790973}
   - component: {fileID: 8061101531218352487}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Mesh
   m_TagString: Grabbable
   m_Icon: {fileID: 0}

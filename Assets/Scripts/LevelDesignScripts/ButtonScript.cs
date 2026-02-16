@@ -6,9 +6,19 @@ public class ButtonScript : MonoBehaviour
     [SerializeField] RaisedPlatform raisedPlatform;
     [SerializeField] RaisedPlatform raisedPlatform2;
     [SerializeField] RaisedPlatform raisedPlatform3;
+    [SerializeField] RaisedPlatform raisedPlatform4;
+    [SerializeField] RaisedPlatform raisedPlatform5;
+    [SerializeField] RaisedPlatform raisedPlatform6;
+    [SerializeField] RaisedPlatform raisedPlatform7;
+    [SerializeField] RaisedPlatform raisedPlatform8;
     [SerializeField] GateScript gateScript;
     [SerializeField] GateScript gateScript2;
     [SerializeField] GateScript gateScript3;
+    [SerializeField] GateScript gateScript4;
+    [SerializeField] GateScript gateScript5;
+    [SerializeField] GateScript gateScript6;
+    [SerializeField] GateScript gateScript7;
+    [SerializeField] GateScript gateScript8;
 
     [SerializeField] MeshRenderer meshPath;
     [SerializeField] Material PressedMaterial;
@@ -39,6 +49,22 @@ public class ButtonScript : MonoBehaviour
         if (raisedPlatform3 != null)
             raisedPlatform3.OnTriggerActivatePlatform(true);
 
+        if (raisedPlatform4 != null)
+            raisedPlatform4.OnTriggerActivatePlatform(true);
+
+        if (raisedPlatform5 != null)
+            raisedPlatform5.OnTriggerActivatePlatform(true);
+
+        if (raisedPlatform6 != null)
+            raisedPlatform6.OnTriggerActivatePlatform(true);
+
+        if (raisedPlatform7 != null)
+            raisedPlatform7.OnTriggerActivatePlatform(true);
+
+        if (raisedPlatform8 != null)
+            raisedPlatform8.OnTriggerActivatePlatform(true);
+
+
         if (gateScript != null)
             gateScript.OnTriggerActivateGate(true);
 
@@ -47,6 +73,21 @@ public class ButtonScript : MonoBehaviour
 
         if (gateScript3 != null)
             gateScript3.OnTriggerActivateGate(true);
+
+        if (gateScript4 != null)
+            gateScript4.OnTriggerActivateGate(true);
+
+        if (gateScript5 != null)
+            gateScript5.OnTriggerActivateGate(true);
+
+        if (gateScript6 != null)
+            gateScript6.OnTriggerActivateGate(true);
+        
+        if (gateScript7 != null)
+            gateScript7.OnTriggerActivateGate(true);
+        
+        if (gateScript8 != null)
+            gateScript8.OnTriggerActivateGate(true);
 
         StartCoroutine(PressAnimation());
     }
