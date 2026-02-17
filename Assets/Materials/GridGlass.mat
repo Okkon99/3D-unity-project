@@ -12,16 +12,20 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHAMODULATE_ON
   - _BLEND_MODE_PIN_LIGHT
   - _COORDINATES_OBJECT
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses:
   - MOTIONVECTORS
+  - DepthOnly
   m_LockedProperties: _Dirt
   m_SavedProperties:
     serializedVersion: 3
@@ -39,7 +43,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Side_Texture:
-        m_Texture: {fileID: 2800000, guid: c2a382850ab595c4487ba6767131b17a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3cfb38f0471d747ae888001021fc3660, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2D:
@@ -55,7 +59,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Top_Texture:
-        m_Texture: {fileID: 2800000, guid: c2a382850ab595c4487ba6767131b17a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3cfb38f0471d747ae888001021fc3660, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -72,14 +76,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
     - _BLEND_MODE: 2
     - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
+    - _Blend: 3
+    - _BlendModePreserveSpecular: 1
     - _Blend_Opacity: 0.5
     - _COORDINATES: 0
+    - _CastShadows: 1
+    - _Cull: 2
     - _Dirt: 0
     - _Dirt_Blend: 0.875
     - _Dirt_Height: 2
+    - _DstBlend: 0
+    - _DstBlendAlpha: 1
     - _Edge_Sharpness: 50
     - _Emission: 0
     - _Emission_Tiling: 1
@@ -88,12 +100,20 @@ Material:
     - _Offset: 1.39
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Smoothness: 0
+    - _SrcBlend: 2
+    - _SrcBlendAlpha: 0
+    - _Surface: 1
     - _Tiling: 1
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
     m_Colors:
     - _Dirt_Color: {r: 0.18117811, g: 0.10346209, b: 0.23584908, a: 0}
     - _Emission_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Side_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Side_Color: {r: 1, g: 1, b: 1, a: 0.11372549}
     - _Side_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Top_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Top_Offset: {r: 0, g: 0, b: 0, a: 0}
