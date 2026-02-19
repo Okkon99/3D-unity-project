@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public Transform cameraAnchor;
     [SerializeField] public PlayerBackpack backpack;
     [SerializeField] private PlayerGrab playerGrab;
+    [SerializeField] private DeployAudioPlayer deployAudio;
     [SerializeField] private float velocity; //debug line
 
     bool isGrounded;
@@ -117,7 +118,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.Deploy.triggered)
         {
-            backpack.Deploy(transform.forward * (deployLaunchVelocity / 4f) + (transform.up * deployLaunchVelocity));
+            if (backpack.IsOccupied)
+            {
+                backpack.Deploy(transform.forward * (deployLaunchVelocity / 4f) + (transform.up * deployLaunchVelocity));
+                
+                if (deployAudio != null)
+                {
+                    deployAudio.PlayDeploySequence();
+                }
+            }
         }
     }
 
@@ -326,10 +335,6 @@ public class PlayerMovement : MonoBehaviour
     public void SetActive(bool active)
     {
         isActivePlayer = active;
-
-        var listener = GetComponentInChildren<AudioListener>();
-        if (listener != null)
-            listener.enabled = active;
 
         if (!active)
         {

@@ -19,6 +19,9 @@ public class BackpackPreviewRenderer : MonoBehaviour
 
         currentPreviewInstance = Instantiate(item.gameObject, previewAnchor);
 
+        foreach (var smoke in currentPreviewInstance.GetComponentsInChildren<ParticleSystem>())
+            Destroy(smoke.gameObject);//prevents smoke from showing up in the UI view if picked up early enough
+
         currentPreviewInstance.transform.localPosition = Vector3.zero;
         currentPreviewInstance.transform.localRotation =
             Quaternion.Euler(displayAngle); 

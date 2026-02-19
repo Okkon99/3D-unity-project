@@ -6,6 +6,10 @@ public class PlayerBackpack : MonoBehaviour
     [SerializeField] private Transform backpackAnchor;
     [SerializeField] private BackpackPreviewRenderer previewRenderer;
     [SerializeField] private PlayerGrab playerGrab;
+    [SerializeField] private GameObject deploySmokePrefab;
+    [SerializeField] private PlayerCamera playerCamera;
+    [SerializeField] private float smokeDuration;
+
     private PlayerPairManager pairManager;
 
     private IsBackpackable currentItem;
@@ -67,6 +71,14 @@ public class PlayerBackpack : MonoBehaviour
 
 
         currentItem.OnExitBackpack(force);
+
+        if (deploySmokePrefab != null)
+        {
+            GameObject smoke = Instantiate(deploySmokePrefab, (currentItem.transform.position - transform.up), Quaternion.identity);
+            smoke.transform.parent = currentItem.transform;
+            Destroy(smoke, smokeDuration);
+        }
+
         currentItem = null;
 
         previewRenderer?.Clear();

@@ -11,13 +11,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - PreviewLayer
+  - 
   - Water
   - UI
   - Floor
   - Player
-  - 
-  - 
+  - PreviewLayer
+  - IgnoreInPreviewLayer
   - 
   - 
   - 
