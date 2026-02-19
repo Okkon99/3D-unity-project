@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4159341585405864488}
   - component: {fileID: 249275997486288822}
-  - component: {fileID: 8404402659798563658}
+  - component: {fileID: 5262126756246563488}
   - component: {fileID: 1111354815631301054}
   - component: {fileID: 2457908923965856494}
   - component: {fileID: 2460212808911409424}
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IsBackpackable
   rb: {fileID: 0}
---- !u!114 &8404402659798563658
+--- !u!114 &5262126756246563488
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +95,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6c96b2bd58acd449b81f554cdfdf9582, type: 2}
+  - {fileID: 2100000, guid: a6384a2a6a40b1d47a60892f30aa5bbb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

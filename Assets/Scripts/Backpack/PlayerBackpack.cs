@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerBackpack : MonoBehaviour
 {
     [SerializeField] private Transform backpackAnchor;
+    [SerializeField] private BackpackPreviewRenderer previewRenderer;
+    [SerializeField] private PlayerGrab playerGrab;
     private PlayerPairManager pairManager;
 
     private IsBackpackable currentItem;
@@ -24,17 +26,29 @@ public class PlayerBackpack : MonoBehaviour
         currentItem = item;
         item.OnEnterBackpack(backpackAnchor);
 
+
         var augment = item.GetComponent<AugmentBase>();
         if (augment != null)
         {
             var owner = GetComponent<PlayerMovement>();
             owner.EquipAugment(augment);
+
+            if (owner == pairManager.activePlayer)
+                previewRenderer?.ShowItem(item);
         }
 
         var movement = item.GetComponent<PlayerMovement>();
         if (movement != null)
         {
             pairManager.ForceSwapTo(GetComponent<PlayerMovement>());
+            previewRenderer?.ShowItem(item);
+
+            PlayerGrab playerGrab = movement.gameObject.GetComponent<PlayerGrab>();
+
+            if (playerGrab.heldBody != null)
+            {
+                playerGrab.Release();
+            }
         }
 
         return true;
@@ -51,8 +65,21 @@ public class PlayerBackpack : MonoBehaviour
             owner.UnequipAugment();
         }
 
+
         currentItem.OnExitBackpack(force);
         currentItem = null;
+
+        previewRenderer?.Clear();
     }
 
+
+    public void RefreshPreview()
+    {
+        if (previewRenderer == null) return;
+
+        if (currentItem != null)
+            previewRenderer.ShowItem(currentItem);
+        else
+            previewRenderer.Clear();
+    }
 }

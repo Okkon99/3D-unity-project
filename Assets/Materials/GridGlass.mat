@@ -13,7 +13,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHAMODULATE_ON
-  - _BLEND_MODE_PIN_LIGHT
+  - _BLEND_MODE_MULTIPLY
   - _COORDINATES_OBJECT
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
@@ -78,12 +78,12 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _BLEND_MODE: 2
+    - _BLEND_MODE: 1
     - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
     - _Blend: 3
     - _BlendModePreserveSpecular: 1
-    - _Blend_Opacity: 0.5
+    - _Blend_Opacity: 0.35
     - _COORDINATES: 0
     - _CastShadows: 1
     - _Cull: 2
@@ -105,7 +105,7 @@ Material:
     - _SrcBlend: 2
     - _SrcBlendAlpha: 0
     - _Surface: 1
-    - _Tiling: 1
+    - _Tiling: 1.87
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 0
@@ -113,7 +113,7 @@ Material:
     m_Colors:
     - _Dirt_Color: {r: 0.18117811, g: 0.10346209, b: 0.23584908, a: 0}
     - _Emission_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Side_Color: {r: 1, g: 1, b: 1, a: 0.11372549}
+    - _Side_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Side_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Top_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Top_Offset: {r: 0, g: 0, b: 0, a: 0}

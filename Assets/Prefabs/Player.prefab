@@ -495,7 +495,6 @@ MonoBehaviour:
   sprintSpeedPercent: 125
   jumpHeight: 8.5
   coyoteTimer: 0.12
-  crouchHeightPercent: 0.5
   groundFriction: 1
   airFriction: 0
   fallGravityMultiplier: 2
@@ -509,6 +508,7 @@ MonoBehaviour:
   inputManager: {fileID: 0}
   cameraAnchor: {fileID: 4082700218336288006}
   backpack: {fileID: 7178351173754635844}
+  playerGrab: {fileID: 2907521800970142815}
   velocity: 0
   inputDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &7178351173754635844
@@ -524,6 +524,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBackpack
   backpackAnchor: {fileID: 4687554678250777950}
+  previewRenderer: {fileID: 0}
+  playerGrab: {fileID: 2907521800970142815}
 --- !u!114 &2907521800970142815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,8 +540,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerGrab
   grabManager: {fileID: 3379827483892394947}
   cameraAnchor: {fileID: 4082700218336288006}
+  playerRB: {fileID: 2642418309012457911}
   maxReach: 2.5
   holdDistance: 2.5
+  heldBody: {fileID: 0}
 --- !u!114 &6688149642969310969
 MonoBehaviour:
   m_ObjectHideFlags: 0

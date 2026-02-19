@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private InputManager inputManager;
     [SerializeField] public Transform cameraAnchor;
     [SerializeField] public PlayerBackpack backpack;
+    [SerializeField] private PlayerGrab playerGrab;
     [SerializeField] private float velocity; //debug line
 
     bool isGrounded;
@@ -92,7 +93,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.Augment.triggered)
         {
-            equippedAugment.Toggle();
+            if (playerGrab.heldBody != null && !backpack.IsOccupied)
+            {
+                playerGrab.heldBody.transform.position = (transform.position + (transform.up *1f) + (transform.forward * -1f));
+                playerGrab.heldBody.transform.rotation = Quaternion.identity;
+                playerGrab.Release();
+            }
+            else if (equippedAugment != null)
+            {
+                equippedAugment.Toggle();
+            }
         }
 
         Vector2 lookDelta = input.Look.ReadValue<Vector2>();
@@ -256,16 +266,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    private void ApplyBetterGravity()
-    {
-        if (!isGrounded)
-        {
-            rb.AddForce(
-                Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1f),
-                ForceMode.Acceleration
-            );
-        }
-    }
+
 
     private bool CheckGrounded(out RaycastHit hit)
     {
@@ -335,6 +336,11 @@ public class PlayerMovement : MonoBehaviour
             moveInput = Vector2.zero;
             jumpPressed = false;
             sprintHeld = false;
+        }
+
+        if (active && backpack != null)
+        {
+            backpack.RefreshPreview();
         }
     }
 

@@ -22,17 +22,33 @@ public class ButtonScript : MonoBehaviour
 
     [SerializeField] MeshRenderer meshPath;
     [SerializeField] Material PressedMaterial;
-
+    Material material;
     Material defaultMaterial;
     bool isPressed;
 
     Vector3 startPos;
     Vector3 endPos;
 
+    private void Awake()
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+
+        if (renderer == null)
+        {
+            return;
+        }
+
+        material = renderer.material;
+        material.EnableKeyword("_Emission");
+        PressedMaterial.SetColor("_Emission_Color", Color.black);
+    }
+
+
     private void Start()
     {
         defaultMaterial = GetComponent<Material>();
         startPos = transform.position;
+        PressedMaterial.SetColor("_Emission_Color", Color.black);
     }
 
     public void OnButtonPressed()
@@ -90,6 +106,7 @@ public class ButtonScript : MonoBehaviour
             gateScript8.OnTriggerActivateGate(true);
 
         StartCoroutine(PressAnimation());
+        material.SetColor("_Emission_Color", Color.black);
     }
 
     public void OnButtonExpired()

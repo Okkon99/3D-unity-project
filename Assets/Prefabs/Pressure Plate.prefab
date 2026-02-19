@@ -48,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
   raisedPlatform: {fileID: 0}
   gateScript: {fileID: 0}
+  plateColor: {r: 0, g: 0, b: 0, a: 1}
+  emissionStrength: 5
 --- !u!54 &6631204211120567315
 Rigidbody:
   m_ObjectHideFlags: 0

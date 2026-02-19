@@ -72,7 +72,7 @@ Material:
     - _BLEND_MODE: 0
     - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
-    - _Emission: 0
+    - _Emission: 1
     - _Metallic: 0.3
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -80,7 +80,7 @@ Material:
     - _Tiling: 1
     m_Colors:
     - _Base_Color: {r: 0.42352942, g: 0.28627452, b: 0.6039216, a: 1}
-    - _Emission_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Emission_Color: {r: 0.32307673, g: 0, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3729133454598192734

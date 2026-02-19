@@ -5,12 +5,13 @@ public class PlayerGrab : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform grabManager;
     [SerializeField] private Transform cameraAnchor;
+    [SerializeField] private Rigidbody playerRB;
 
     [Header("Grab Settings")]
     [SerializeField] private float maxReach = 4f;
     [SerializeField] private float holdDistance = 2f;
 
-    private Rigidbody heldBody;
+    public Rigidbody heldBody;
     private Transform heldTransform;
     bool isHolding;
 
@@ -47,6 +48,11 @@ public class PlayerGrab : MonoBehaviour
 
     private void TryGrab()
     {
+        if (playerRB.isKinematic)
+        {
+            return;
+        }
+
         Ray ray = new Ray(cameraAnchor.position, cameraAnchor.forward);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, maxReach))
@@ -77,7 +83,7 @@ public class PlayerGrab : MonoBehaviour
         heldTransform.localRotation = Quaternion.identity;
     }
 
-    private void Release()
+    public void Release()
     {
         heldTransform.SetParent(null);
         heldBody.isKinematic = false;

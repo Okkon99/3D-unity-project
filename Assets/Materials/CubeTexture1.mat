@@ -15,7 +15,7 @@ Material:
   m_InvalidKeywords:
   - _BLEND_MODE_ADD
   - _EMISSION
-  m_LightmapFlags: 2
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -63,7 +63,7 @@ Material:
     - _Metallic: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 0.19
+    - _Smoothness: 0.145
     - _Tiling: 1
     m_Colors:
     - _Base_Color: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 0}
