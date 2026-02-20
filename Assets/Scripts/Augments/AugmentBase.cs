@@ -2,10 +2,12 @@ using UnityEngine;
 
 public abstract class AugmentBase : MonoBehaviour
 {
-    protected bool isActive;
+
+    public bool isActive;
     protected PlayerMovement owner;
     protected Vector3 startPosition;
     protected Quaternion startRotation;
+    private BackpackPreviewRenderer previewRenderer;
 
     protected Rigidbody rb;
 
@@ -13,6 +15,7 @@ public abstract class AugmentBase : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        previewRenderer = FindFirstObjectByType<BackpackPreviewRenderer>();
     }
 
     private void Start()
@@ -58,6 +61,8 @@ public abstract class AugmentBase : MonoBehaviour
 
     public virtual void Toggle()
     {
+        BackpackPreviewRenderer pr = previewRenderer;
         isActive = !isActive;
+        pr.augmentSlotCurrentStatusText.text = isActive ? "(Active)" : "(Inactive)";
     }
 }

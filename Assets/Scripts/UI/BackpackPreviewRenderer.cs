@@ -7,9 +7,10 @@ public class BackpackPreviewRenderer : MonoBehaviour
     [SerializeField] private Transform previewAnchor;
     [SerializeField] private Vector3 displayAngle;
     [SerializeField] private TextMeshProUGUI augmentSlotText;
-    [SerializeField] private TextMeshProUGUI augmentSlotCurrentStatusText;
+    [SerializeField] public TextMeshProUGUI augmentSlotCurrentStatusText;
 
     private GameObject currentPreviewInstance;
+    private AugmentBase currentItemAugmentBase;
 
     public void ShowItem(IsBackpackable item)
     {
@@ -36,11 +37,15 @@ public class BackpackPreviewRenderer : MonoBehaviour
             augmentSlotText.text = item.gameObject.name.ToString();
             if (item.GetComponent<AugmentBase>())
             {
-                augmentSlotCurrentStatusText.text = "(Inactive)";
+                if (item.GetComponent<AugmentBase>())
+                {
+                    currentItemAugmentBase = item.GetComponent<AugmentBase>();
+                    augmentSlotCurrentStatusText.text = currentItemAugmentBase.isActive ? "(Active)" : "(Inactive)";
+                }
             }
         }
         else
-            augmentSlotText.text = "Augment not recognized!";
+            augmentSlotText.text = "Augment Unknown!";
     }
 
     public void Clear()
@@ -48,7 +53,7 @@ public class BackpackPreviewRenderer : MonoBehaviour
         if (currentPreviewInstance != null)
         {
             Destroy(currentPreviewInstance);
-            augmentSlotText.text = "Augment slot unoccupied.";
+            augmentSlotText.text = "No Augment.";
             augmentSlotCurrentStatusText.text = "";
         }
     }

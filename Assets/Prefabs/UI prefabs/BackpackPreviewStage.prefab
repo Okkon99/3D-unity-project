@@ -79,7 +79,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BackpackPreviewRenderer
   previewAnchor: {fileID: 3193762572208905459}
   displayAngle: {x: 15, y: 225, z: 15}
-  text: {fileID: 0}
+  augmentSlotText: {fileID: 0}
+  augmentSlotCurrentStatusText: {fileID: 0}
 --- !u!1 &8588971934486168928
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,7 +154,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 264
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 7f6b81ec5cad7934daf93031e7014baa, type: 2}
   m_TargetDisplay: 0
