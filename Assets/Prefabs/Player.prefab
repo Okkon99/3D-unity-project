@@ -489,7 +489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   isActivePlayer: 1
-  lookSensitivity: 0.04
+  lookSensitivity: 0.03
   groundSpeed: 7.5
   airSpeed: 6
   acceleration: 35
@@ -529,6 +529,7 @@ MonoBehaviour:
   previewRenderer: {fileID: 0}
   playerGrab: {fileID: 2907521800970142815}
   deploySmokePrefab: {fileID: 5634439829027394363, guid: 5bcbf786d9ab1af48b7cdd116499b685, type: 3}
+  deployBurstPrefab: {fileID: 5136733043985893474, guid: 6025bef1a8638bc4292a7b6ec0a9e094, type: 3}
   playerCamera: {fileID: 0}
   smokeDuration: 4
 --- !u!114 &2907521800970142815
@@ -825,7 +826,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b4e55b56e2aaf4b4889c320b6fa79feb, type: 3}
   - {fileID: 8300000, guid: 80cc66eb189c68f49a3962b913941e68, type: 3}
   - {fileID: 8300000, guid: 960a23255342d0d418ffcc853f038176, type: 3}
-  piston: {fileID: 8300000, guid: 4b4e7f9994377a948a3e3c3411fdad41, type: 3}
+  piston: {fileID: 0}
   steamHiss: {fileID: 8300000, guid: 53a12781c29613e498e00293746771b2, type: 3}
   pistonDelay: 0
-  hissDelay: 0.2
+  hissDelay: 0

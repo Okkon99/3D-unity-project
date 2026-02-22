@@ -8,12 +8,12 @@ public class DeployAudioPlayer : MonoBehaviour
 
     [Header("Clips")]
     [SerializeField] private AudioClip[] metalImpact;
-    [SerializeField] private AudioClip piston;
+    //[SerializeField] private AudioClip piston;
     [SerializeField] private AudioClip steamHiss;
 
 
     [Header("Timing")]
-    [SerializeField] private float pistonDelay;
+    //[SerializeField] private float pistonDelay;
     [SerializeField] private float hissDelay;
 
     Coroutine currentRoutine;
@@ -34,10 +34,10 @@ public class DeployAudioPlayer : MonoBehaviour
             source.PlayOneShot(clip);
         }
 
-        yield return new WaitForSeconds(pistonDelay);
+        //yield return new WaitForSeconds(pistonDelay);
 
-        if (piston != null)
-            source.PlayOneShot(piston);
+        //if (piston != null)
+        //    source.PlayOneShot(piston);
 
         yield return new WaitForSeconds(hissDelay);
 

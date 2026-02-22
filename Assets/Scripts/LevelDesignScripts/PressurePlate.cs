@@ -47,7 +47,7 @@ public class PressurePlate : MonoBehaviour
         if (gateScript3 != null)
             gateScript3.OnTriggerActivateGate(true);
 
-        material.SetColor("_Emission_Color", emissionColor);
+        material.SetColor("_Emission_Color", emissionColor * 5);
     }
 
     private void OnTriggerExit(Collider other)

@@ -7,6 +7,7 @@ public class PlayerBackpack : MonoBehaviour
     [SerializeField] private BackpackPreviewRenderer previewRenderer;
     [SerializeField] private PlayerGrab playerGrab;
     [SerializeField] private GameObject deploySmokePrefab;
+    [SerializeField] private GameObject deployBurstPrefab;
     [SerializeField] private PlayerCamera playerCamera;
     [SerializeField] private float smokeDuration;
 
@@ -75,8 +76,11 @@ public class PlayerBackpack : MonoBehaviour
         if (deploySmokePrefab != null)
         {
             GameObject smoke = Instantiate(deploySmokePrefab, (currentItem.transform.position - transform.up), Quaternion.identity);
+            GameObject burst = Instantiate(deployBurstPrefab, transform.position - transform.forward, Quaternion.Euler(90,0,0));
             smoke.transform.parent = currentItem.transform;
+            burst.transform.parent = transform;
             Destroy(smoke, smokeDuration);
+            Destroy(burst, smokeDuration);
         }
 
         currentItem = null;
