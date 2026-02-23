@@ -71,7 +71,12 @@ public class PlayerBackpack : MonoBehaviour
         }
 
 
+
         currentItem.OnExitBackpack(force);
+
+        var playerMovement = currentItem.GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+            pairManager.ForceSwapTo(playerMovement.GetComponent<PlayerMovement>());
 
         if (deploySmokePrefab != null)
         {

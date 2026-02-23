@@ -12,6 +12,9 @@ public class PressurePlate : MonoBehaviour
     private Material material;
     private Color emissionColor;
 
+    public bool isPressed;
+
+
     private void Awake()
     {
         MeshRenderer renderer = GetComponentInChildren<MeshRenderer>();
@@ -47,7 +50,10 @@ public class PressurePlate : MonoBehaviour
         if (gateScript3 != null)
             gateScript3.OnTriggerActivateGate(true);
 
-        material.SetColor("_Emission_Color", emissionColor * 5);
+        if (material != null)
+            material.SetColor("_Emission_Color", emissionColor * 5);
+
+        isPressed = true;
     }
 
     private void OnTriggerExit(Collider other)
@@ -70,6 +76,8 @@ public class PressurePlate : MonoBehaviour
         if (gateScript3 != null)
             gateScript3.OnTriggerActivateGate(false);
 
-        material.SetColor("_Emission_Color", Color.black);
+        if (material != null)
+            material.SetColor("_Emission_Color", Color.black);
+        isPressed = false;
     }
 }

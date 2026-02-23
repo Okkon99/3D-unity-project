@@ -45,7 +45,7 @@ public class BackpackPreviewRenderer : MonoBehaviour
             }
         }
         else
-            augmentSlotText.text = "Augment Unknown!";
+            augmentSlotText.text = "AUGMENT UNKNOWN!";
     }
 
     public void Clear()
@@ -53,7 +53,7 @@ public class BackpackPreviewRenderer : MonoBehaviour
         if (currentPreviewInstance != null)
         {
             Destroy(currentPreviewInstance);
-            augmentSlotText.text = "No Augment.";
+            augmentSlotText.text = "NO AUGMENT.";
             augmentSlotCurrentStatusText.text = "";
         }
     }

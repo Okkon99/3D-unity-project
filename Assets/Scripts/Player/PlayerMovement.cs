@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
     bool canJump;
     float coyoteTime;
     RaycastHit groundHit;
-    AugmentBase equippedAugment;
+    public AugmentBase equippedAugment;
 
     //debug stuff
     Vector3 startPos;

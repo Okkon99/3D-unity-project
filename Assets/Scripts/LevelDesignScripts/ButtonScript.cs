@@ -24,7 +24,7 @@ public class ButtonScript : MonoBehaviour
     [SerializeField] Material PressedMaterial;
     Material material;
     Material defaultMaterial;
-    bool isPressed;
+    public bool isPressed;
 
     Vector3 startPos;
     Vector3 endPos;

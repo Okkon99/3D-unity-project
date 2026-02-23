@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerGrab : MonoBehaviour
 {
@@ -6,6 +8,8 @@ public class PlayerGrab : MonoBehaviour
     [SerializeField] private Transform grabManager;
     [SerializeField] private Transform cameraAnchor;
     [SerializeField] private Rigidbody playerRB;
+    [SerializeField] private TextMeshProUGUI crosshairEdges;
+    [SerializeField] private TextMeshProUGUI crosshairText;
 
     [Header("Grab Settings")]
     [SerializeField] private float maxReach = 4f;
@@ -15,23 +19,32 @@ public class PlayerGrab : MonoBehaviour
     private Transform heldTransform;
     bool isHolding;
 
+    Color edgeColor;
+    Color textColor;
+    
+    private void Awake()
+    {
+        edgeColor = crosshairEdges.color;
+        textColor = crosshairText.color;
+    }
+
 
     void Update()
     {
         if (!GetComponent<PlayerMovement>().isActivePlayer)
-        {
             return;
-        }
 
         var input = InputManager.instance.Input.Gameplay;
 
-
         UpdateGrabManagerTransform();
+
+        bool hasTarget = CheckForGrabbable(out RaycastHit hit);
+        UpdateUI(hasTarget);
 
         if (input.Grab.triggered)
         {
             if (heldBody == null)
-                TryGrab();
+                TryGrab(hit);
             else
                 Release();
         }
@@ -46,27 +59,12 @@ public class PlayerGrab : MonoBehaviour
         grabManager.rotation = cameraAnchor.rotation;
     }
 
-    private void TryGrab()
+    private void TryGrab(RaycastHit hit)
     {
-        if (playerRB.isKinematic)
-        {
-            return;
-        }
-
-        Ray ray = new Ray(cameraAnchor.position, cameraAnchor.forward);
-
-        if (!Physics.Raycast(ray, out RaycastHit hit, maxReach))
-            return;
-
-        if (!hit.collider.CompareTag("Grabbable"))
-        {
-            return;
-        }
+        if (!hit.collider) return;
 
         if (hit.collider.TryGetComponent<ButtonScript>(out ButtonScript button))
-        {
             button.OnButtonPressed();
-        }
 
         Rigidbody rb = hit.collider.attachedRigidbody;
         if (rb == null)
@@ -74,7 +72,6 @@ public class PlayerGrab : MonoBehaviour
 
         heldBody = rb;
         heldTransform = rb.transform;
-        isHolding = true;
 
         rb.isKinematic = true;
 
@@ -91,5 +88,50 @@ public class PlayerGrab : MonoBehaviour
         heldBody = null;
         heldTransform = null;
         isHolding = false;
+    }
+
+    // UI
+    void UpdateUI(bool hasTarget)
+    {
+        if (heldBody != null)
+        {
+            SetAlpha(1f);
+            SetText("release");
+            crosshairEdges.text = "[             ]";
+        }
+        else if (hasTarget)
+        {
+            SetAlpha(1f);
+            SetText("grab");
+            crosshairEdges.text = "[        ]";
+        }
+        else
+        {
+            SetAlpha(edgeColor.a);
+            SetText("");
+            crosshairEdges.text = "[        ]";
+        }
+    }
+
+    bool CheckForGrabbable(out RaycastHit hit)
+    {
+        Ray ray = new Ray(cameraAnchor.position, cameraAnchor.forward);
+
+        if (!Physics.Raycast(ray, out hit, maxReach))
+            return false;
+
+        return hit.collider.CompareTag("Grabbable");
+    }
+
+    public void SetAlpha(float alpha) // 0–1
+    {
+        Color c = crosshairEdges.color;
+        c.a = alpha;
+        crosshairEdges.color = c;
+    }
+
+    public void SetText(string text)
+    {
+        crosshairText.text = text;
     }
 }

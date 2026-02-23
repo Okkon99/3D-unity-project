@@ -80,7 +80,7 @@ Material:
     - _Tiling: 1
     m_Colors:
     - _Base_Color: {r: 0.20392153, g: 0.856471, b: 0.9254902, a: 1}
-    - _Emission_Color: {r: 0.0768957, g: 0.5138187, b: 0.6037736, a: 0}
+    - _Emission_Color: {r: 0, g: 0.5001408, b: 0.6037736, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3729133454598192734
