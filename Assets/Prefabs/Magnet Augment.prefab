@@ -61,8 +61,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71964b2f9061bc74cb8e66310774a46c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MagnetAugment
+  isActive: 0
   magnetRadius: 8
-  pullStrength: 25
+  pullStrength: 30
   magnetCenter: {fileID: 4159341585405864488}
 --- !u!54 &3682361515568784355
 Rigidbody:
