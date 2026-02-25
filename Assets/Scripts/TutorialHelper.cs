@@ -21,8 +21,9 @@ public class TutorialHelper : MonoBehaviour
 
     private void Update()
     {
-        if (rb != null && rb.isKinematic && tutorialPart.col == null)
+        if (rb != null && fulfillsCondition1 && tutorialPart.col == null)
         {
+            tutorialPart.condition1 = true;
             tutorialPart.ClearText();
             rb = null;
         }

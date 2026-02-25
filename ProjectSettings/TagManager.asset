@@ -7,11 +7,12 @@ TagManager:
   - Grabbable
   - BackpackHitbox
   - Deathbox
+  - Pressable
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Grabbable
   - Water
   - UI
   - Floor

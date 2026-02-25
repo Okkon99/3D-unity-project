@@ -189,8 +189,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4687554678250777950}
-  - component: {fileID: 6099742881452345773}
-  - component: {fileID: 4824189708434285721}
   m_Layer: 0
   m_Name: BackpackAnchor
   m_TagString: BackpackHitbox
@@ -213,39 +211,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7841192785353025827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6099742881452345773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3672152259374191826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 686d63ea7bcd91243bd3c5e5815b9d77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BackpackTrigger
---- !u!135 &4824189708434285721
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3672152259374191826}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.8
-  m_Center: {x: 0, y: 0, z: 0.7}
 --- !u!1 &4488936586524162768
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,37 +366,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7841192785353025827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7317150881972993318
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3379827483892394947}
-  m_Layer: 7
-  m_Name: GrabManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3379827483892394947
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7317150881972993318}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7841192785353025827}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7995813620417342588
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,7 +406,6 @@ Transform:
   - {fileID: 4082700218336288006}
   - {fileID: 1374445515872757112}
   - {fileID: 4687554678250777950}
-  - {fileID: 3379827483892394947}
   - {fileID: 317108815940367497}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -513,6 +446,7 @@ MonoBehaviour:
   deployAudio: {fileID: 739296714353595791}
   velocity: 0
   inputDirection: {x: 0, y: 0, z: 0}
+  equippedAugment: {fileID: 0}
 --- !u!114 &7178351173754635844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,11 +478,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cab4fdb84528b4bb95e590360b3193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerGrab
-  grabManager: {fileID: 3379827483892394947}
   cameraAnchor: {fileID: 4082700218336288006}
   playerRB: {fileID: 2642418309012457911}
-  maxReach: 2.5
-  holdDistance: 2.5
+  crosshairEdges: {fileID: 0}
+  crosshairText: {fileID: 0}
+  otherRobotCol: {fileID: 0}
+  maxReach: 3
+  holdDistance: 2
+  followStrength: 800
+  damping: 50
+  rotationStrength: 600
+  rotationDamping: 50
   heldBody: {fileID: 0}
 --- !u!114 &6688149642969310969
 MonoBehaviour:
@@ -826,7 +766,5 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b4e55b56e2aaf4b4889c320b6fa79feb, type: 3}
   - {fileID: 8300000, guid: 80cc66eb189c68f49a3962b913941e68, type: 3}
   - {fileID: 8300000, guid: 960a23255342d0d418ffcc853f038176, type: 3}
-  piston: {fileID: 0}
   steamHiss: {fileID: 8300000, guid: 53a12781c29613e498e00293746771b2, type: 3}
-  pistonDelay: 0
   hissDelay: 0

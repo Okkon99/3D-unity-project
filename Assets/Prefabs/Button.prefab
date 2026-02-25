@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5650093313448032850}
   m_Layer: 6
   m_Name: Button
-  m_TagString: Grabbable
+  m_TagString: Pressable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,13 +52,20 @@ MonoBehaviour:
   raisedPlatform3: {fileID: 0}
   raisedPlatform4: {fileID: 0}
   raisedPlatform5: {fileID: 0}
+  raisedPlatform6: {fileID: 0}
+  raisedPlatform7: {fileID: 0}
+  raisedPlatform8: {fileID: 0}
   gateScript: {fileID: 0}
   gateScript2: {fileID: 0}
   gateScript3: {fileID: 0}
   gateScript4: {fileID: 0}
   gateScript5: {fileID: 0}
+  gateScript6: {fileID: 0}
+  gateScript7: {fileID: 0}
+  gateScript8: {fileID: 0}
   meshPath: {fileID: 5650093313448032850}
   PressedMaterial: {fileID: 2100000, guid: 35e20f82c095a874f84351741f3074e7, type: 2}
+  isPressed: 0
 --- !u!64 &6762232203369192202
 MeshCollider:
   m_ObjectHideFlags: 0

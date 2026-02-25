@@ -5,23 +5,36 @@ using UnityEngine.Rendering.Universal;
 public class PlayerGrab : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Transform grabManager;
     [SerializeField] private Transform cameraAnchor;
     [SerializeField] private Rigidbody playerRB;
     [SerializeField] private TextMeshProUGUI crosshairEdges;
     [SerializeField] private TextMeshProUGUI crosshairText;
+    [SerializeField] private Collider otherRobotCol;
+    [SerializeField] private PlayerGrab otherRobotGrab;
 
     [Header("Grab Settings")]
     [SerializeField] private float maxReach = 4f;
     [SerializeField] private float holdDistance = 2f;
+    [SerializeField] float followStrength = 800f;
+    [SerializeField] float damping = 50f;
+    [SerializeField] float rotationStrength = 600f;
+    [SerializeField] float rotationDamping = 50f;
+
 
     public Rigidbody heldBody;
     private Transform heldTransform;
-    bool isHolding;
+    public bool isHolding;
 
     Color edgeColor;
     Color textColor;
-    
+
+    private enum TargetType
+    {
+        None,
+        Grabbable,
+        Pressable
+    }
+
     private void Awake()
     {
         edgeColor = crosshairEdges.color;
@@ -36,91 +49,155 @@ public class PlayerGrab : MonoBehaviour
 
         var input = InputManager.instance.Input.Gameplay;
 
-        UpdateGrabManagerTransform();
 
-        bool hasTarget = CheckForGrabbable(out RaycastHit hit);
-        UpdateUI(hasTarget);
+        TargetType targetType = CheckForTarget(out RaycastHit hit);
+        UpdateUI(targetType);
 
         if (input.Grab.triggered)
         {
             if (heldBody == null)
-                TryGrab(hit);
-            else
-                Release();
+            {
+                if (targetType == TargetType.Grabbable)
+                    TryGrab(hit);
+
+                else if (targetType == TargetType.Pressable)
+                    TryPress(hit);
+            }
+            else Release();
         }
     }
 
-
-    private void UpdateGrabManagerTransform()
+    private void FixedUpdate()
     {
-        grabManager.position = cameraAnchor.position +
-                               cameraAnchor.forward * holdDistance;
+        if (heldBody == null) return;
 
-        grabManager.rotation = cameraAnchor.rotation;
+        Vector3 targetPos = cameraAnchor.position + cameraAnchor.forward * holdDistance;
+
+        Vector3 toTarget = targetPos - heldBody.position;
+        Vector3 force = toTarget * followStrength - heldBody.linearVelocity * damping;
+        heldBody.AddForce(force, ForceMode.Acceleration);
+
+        Quaternion targetRot = cameraAnchor.rotation;
+        Quaternion delta = targetRot * Quaternion.Inverse(heldBody.rotation);
+
+        delta.ToAngleAxis(out float angle, out Vector3 axis);
+
+        if (angle > 180f) angle -= 360f;
+
+        Vector3 torque = axis * angle * Mathf.Deg2Rad * rotationStrength
+                         - heldBody.angularVelocity * rotationDamping;
+
+        heldBody.AddTorque(torque, ForceMode.Acceleration);
     }
+
+
+
 
     private void TryGrab(RaycastHit hit)
     {
-        if (!hit.collider) return;
-
-        if (hit.collider.TryGetComponent<ButtonScript>(out ButtonScript button))
-            button.OnButtonPressed();
-
-        Rigidbody rb = hit.collider.attachedRigidbody;
-        if (rb == null)
+        if (otherRobotGrab.heldBody == GetComponent<Rigidbody>())
             return;
 
-        heldBody = rb;
-        heldTransform = rb.transform;
+        if (!hit.collider) return;
 
-        rb.isKinematic = true;
+        if (hit.collider.CompareTag("Grabbable"))
+        {
+            Rigidbody rb = hit.collider.attachedRigidbody;
+            if (rb == null)
+                return;
 
-        heldTransform.SetParent(grabManager);
-        heldTransform.localPosition = Vector3.zero;
-        heldTransform.localRotation = Quaternion.identity;
+            if (rb == otherRobotGrab.heldBody)
+                otherRobotGrab.Release();
+
+            heldBody = rb;
+            Collider heldBodyCol = heldBody.GetComponent<Collider>();
+            Physics.IgnoreCollision(heldBodyCol, GetComponent<Collider>(), true);
+            Physics.IgnoreCollision(heldBodyCol, otherRobotCol, true);
+
+            isHolding = true;
+        }
+        else if (hit.collider.CompareTag("Player"))
+        {
+            Rigidbody rb = hit.collider.attachedRigidbody;
+            if (rb == null)
+                return;
+
+            heldBody = rb;
+            Physics.IgnoreCollision(heldBody.GetComponent<Collider>(), GetComponent<Collider>(), true);
+
+            isHolding = true;
+        }
+    }
+
+    private void TryPress(RaycastHit hit)
+    {
+        if (hit.collider.TryGetComponent<ButtonScript>(out ButtonScript button))
+            button.OnButtonPressed();
     }
 
     public void Release()
     {
-        heldTransform.SetParent(null);
-        heldBody.isKinematic = false;
+        if (heldBody == null) return;
 
+        Collider heldBodyCol = heldBody.GetComponent<Collider>();
+        Physics.IgnoreCollision(heldBodyCol, GetComponent<Collider>(), false);
+        Physics.IgnoreCollision(heldBodyCol, otherRobotCol, false);
+        heldBody.linearVelocity = Vector3.zero;
+        heldBody.angularVelocity = Vector3.zero;
         heldBody = null;
-        heldTransform = null;
         isHolding = false;
     }
 
     // UI
-    void UpdateUI(bool hasTarget)
+    void UpdateUI(TargetType targetType)
     {
         if (heldBody != null)
         {
             SetAlpha(1f);
             SetText("release");
             crosshairEdges.text = "[             ]";
+            return;
         }
-        else if (hasTarget)
+
+        switch (targetType)
         {
-            SetAlpha(1f);
-            SetText("grab");
-            crosshairEdges.text = "[        ]";
-        }
-        else
-        {
-            SetAlpha(edgeColor.a);
-            SetText("");
-            crosshairEdges.text = "[        ]";
+            case TargetType.Grabbable:
+                SetAlpha(1f);
+                SetText("grab");
+                crosshairEdges.text = "[        ]";
+                break;
+
+            case TargetType.Pressable:
+                SetAlpha(1f);
+                SetText("press");
+                crosshairEdges.text = "[          ]";
+                break;
+
+            default:
+                SetAlpha(edgeColor.a);
+                SetText("");
+                crosshairEdges.text = "[        ]";
+                break;
         }
     }
 
-    bool CheckForGrabbable(out RaycastHit hit)
+    TargetType CheckForTarget(out RaycastHit hit)
     {
         Ray ray = new Ray(cameraAnchor.position, cameraAnchor.forward);
 
         if (!Physics.Raycast(ray, out hit, maxReach))
-            return false;
+            return TargetType.None;
 
-        return hit.collider.CompareTag("Grabbable");
+        if (hit.collider.CompareTag("Grabbable"))
+            return TargetType.Grabbable;
+
+        if (hit.collider.CompareTag("Player"))
+            return TargetType.Grabbable;
+
+        if (hit.collider.CompareTag("Pressable"))
+            return TargetType.Pressable;
+
+        return TargetType.None;
     }
 
     public void SetAlpha(float alpha) // 0–1

@@ -288,10 +288,10 @@ MonoBehaviour:
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 1, g: 0.5649313, b: 0.15566039, a: 1}
-    topRight: {r: 1, g: 0.5649313, b: 0.15566039, a: 1}
-    bottomLeft: {r: 1, g: 0.7921569, b: 0.57254905, a: 1}
-    bottomRight: {r: 1, g: 0.7921569, b: 0.57254905, a: 1}
+    topLeft: {r: 1, g: 0.7490196, b: 0, a: 1}
+    topRight: {r: 1, g: 0.7490196, b: 0, a: 1}
+    bottomLeft: {r: 1, g: 0.7490196, b: 0, a: 1}
+    bottomRight: {r: 1, g: 0.7490196, b: 0, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -522,7 +522,7 @@ MonoBehaviour:
   m_text: No Augment.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 559a50c31fefb844a96f151a2b1f6e3c, type: 2}
-  m_sharedMaterial: {fileID: 749795679457278778, guid: 559a50c31fefb844a96f151a2b1f6e3c, type: 2}
+  m_sharedMaterial: {fileID: 7537169168874077737, guid: 559a50c31fefb844a96f151a2b1f6e3c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -533,10 +533,10 @@ MonoBehaviour:
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 1, g: 0.5649313, b: 0.15566039, a: 1}
-    topRight: {r: 1, g: 0.5649313, b: 0.15566039, a: 1}
-    bottomLeft: {r: 1, g: 0.7921569, b: 0.57254905, a: 1}
-    bottomRight: {r: 1, g: 0.7921569, b: 0.57254905, a: 1}
+    topLeft: {r: 1, g: 0.7490196, b: 0, a: 1}
+    topRight: {r: 1, g: 0.7490196, b: 0, a: 1}
+    bottomLeft: {r: 1, g: 0.7490196, b: 0, a: 1}
+    bottomRight: {r: 1, g: 0.7490196, b: 0, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -670,10 +670,10 @@ MonoBehaviour:
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 1, g: 0.5649313, b: 0.15566039, a: 1}
-    topRight: {r: 1, g: 0.5649313, b: 0.15566039, a: 1}
-    bottomLeft: {r: 1, g: 0.7939901, b: 0.5707547, a: 1}
-    bottomRight: {r: 1, g: 0.7939901, b: 0.5707547, a: 1}
+    topLeft: {r: 1, g: 0.7490196, b: 0, a: 1}
+    topRight: {r: 1, g: 0.7490196, b: 0, a: 1}
+    bottomLeft: {r: 1, g: 0.7490196, b: 0, a: 1}
+    bottomRight: {r: 1, g: 0.7490196, b: 0, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0

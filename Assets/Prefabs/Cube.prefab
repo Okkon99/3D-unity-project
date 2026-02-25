@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2457908923965856494}
   - component: {fileID: 2460212808911409424}
   - component: {fileID: 1198293176825995675}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Grabbable
   m_Icon: {fileID: 0}
@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db348e814d08626418b057138714ad20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CubeAugment
+  isActive: 0
 --- !u!33 &1111354815631301054
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -96,9 +96,11 @@ public class PlayerMovement : MonoBehaviour
         {
             if (playerGrab.heldBody != null && !backpack.IsOccupied)
             {
-                playerGrab.heldBody.transform.position = (transform.position + (transform.up *1f) + (transform.forward * -1f));
-                playerGrab.heldBody.transform.rotation = Quaternion.identity;
-                playerGrab.Release();
+                if (playerGrab.heldBody.TryGetComponent<IsBackpackable>(out var item))
+                {
+                    playerGrab.Release();
+                    backpack.TryInsert(item);
+                }
             }
             else if (equippedAugment != null)
             {

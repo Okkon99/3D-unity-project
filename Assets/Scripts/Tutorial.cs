@@ -17,7 +17,7 @@ public class Tutorial : MonoBehaviour
         LeftClickBox,
         PressESwapCharacter,
         LeftClickButton,
-        JumpIntoAugmentSlot,
+        EquipAnything,
         Deploy,
         HowToMagnet
     }
@@ -40,8 +40,8 @@ public class Tutorial : MonoBehaviour
             case TutorialPart.LeftClickButton:
                 return "Left click the button to press it.";
             
-            case TutorialPart.JumpIntoAugmentSlot:
-                return "Jump into the other robot's augment\nslot to combine the two.";
+            case TutorialPart.EquipAnything:
+                return "Grab something, then press Q to\nequip it into your augment slot.";
 
             case TutorialPart.Deploy:
                 return "Right-Click to eject the\nactive robot's augment slot";

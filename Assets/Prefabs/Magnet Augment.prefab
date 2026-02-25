@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 1471543838763909222}
   - component: {fileID: 8414837482944790973}
   - component: {fileID: 8061101531218352487}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mesh
   m_TagString: Grabbable
   m_Icon: {fileID: 0}
