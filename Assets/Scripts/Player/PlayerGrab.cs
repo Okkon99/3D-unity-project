@@ -4,6 +4,9 @@ using UnityEngine.Rendering.Universal;
 
 public class PlayerGrab : MonoBehaviour
 {
+    [Header("2nd player backpack state at runtime")]
+    [SerializeField] bool startBackpacked;
+
     [Header("References")]
     [SerializeField] private Transform cameraAnchor;
     [SerializeField] private Rigidbody playerRB;
@@ -11,6 +14,7 @@ public class PlayerGrab : MonoBehaviour
     [SerializeField] private TextMeshProUGUI crosshairText;
     [SerializeField] private Collider otherRobotCol;
     [SerializeField] private PlayerGrab otherRobotGrab;
+    [SerializeField] private PlayerBackpack playerBackpack;
 
     [Header("Grab Settings")]
     [SerializeField] private float maxReach = 4f;
@@ -53,7 +57,7 @@ public class PlayerGrab : MonoBehaviour
         TargetType targetType = CheckForTarget(out RaycastHit hit);
         UpdateUI(targetType);
 
-        if (input.Grab.triggered)
+        if (input.Grab.triggered || otherRobotGrab.startBackpacked)
         {
             if (heldBody == null)
             {
@@ -64,6 +68,13 @@ public class PlayerGrab : MonoBehaviour
                     TryPress(hit);
             }
             else Release();
+
+            if (otherRobotGrab.startBackpacked == true)
+            {
+                playerBackpack.TryInsert(heldBody.GetComponent<IsBackpackable>());
+                Release();
+                otherRobotGrab.startBackpacked = false;
+            }
         }
     }
 

@@ -15,6 +15,8 @@ public class PlayerBackpack : MonoBehaviour
 
     private IsBackpackable currentItem;
 
+    private PlayerGrab augmentPlayerGrab;
+
     public bool IsOccupied => currentItem != null;
 
     public void SetPairManager(PlayerPairManager manager)
@@ -47,12 +49,14 @@ public class PlayerBackpack : MonoBehaviour
             pairManager.ForceSwapTo(GetComponent<PlayerMovement>());
             previewRenderer?.ShowItem(item);
 
-            PlayerGrab playerGrab = movement.gameObject.GetComponent<PlayerGrab>();
+            augmentPlayerGrab = movement.gameObject.GetComponent<PlayerGrab>();
 
             if (playerGrab.heldBody != null)
             {
-                playerGrab.Release();
+                augmentPlayerGrab.Release();
             }
+
+            augmentPlayerGrab.enabled = false;
         }
 
         return true;
@@ -88,6 +92,9 @@ public class PlayerBackpack : MonoBehaviour
         }
 
         currentItem = null;
+
+        if (augmentPlayerGrab != null && augmentPlayerGrab.enabled == false)
+            augmentPlayerGrab.enabled = true;
 
         previewRenderer?.Clear();
     }

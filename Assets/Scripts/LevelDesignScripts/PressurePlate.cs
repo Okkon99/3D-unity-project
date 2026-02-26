@@ -5,9 +5,11 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] RaisedPlatform raisedPlatform;
     [SerializeField] RaisedPlatform raisedPlatform2;
     [SerializeField] RaisedPlatform raisedPlatform3;
+    [SerializeField] RaisedPlatform raisedPlatform4;
     [SerializeField] GateScript gateScript;
     [SerializeField] GateScript gateScript2;
     [SerializeField] GateScript gateScript3;
+    [SerializeField] GateScript gateScript4;
 
     private Material material;
     private Color emissionColor;
@@ -41,6 +43,9 @@ public class PressurePlate : MonoBehaviour
         if (raisedPlatform3 != null)
             raisedPlatform3.OnTriggerActivatePlatform(true);
 
+        if (raisedPlatform4 != null)
+            raisedPlatform4.OnTriggerActivatePlatform(true);
+
         if (gateScript != null)
             gateScript.OnTriggerActivateGate(true);
 
@@ -49,6 +54,9 @@ public class PressurePlate : MonoBehaviour
 
         if (gateScript3 != null)
             gateScript3.OnTriggerActivateGate(true);
+
+        if (gateScript4 != null)
+            gateScript4.OnTriggerActivateGate(true);
 
         if (material != null)
             material.SetColor("_Emission_Color", emissionColor * 5);
@@ -66,6 +74,9 @@ public class PressurePlate : MonoBehaviour
         
         if (raisedPlatform3 != null)
             raisedPlatform3.OnTriggerActivatePlatform(false);
+        
+        if (raisedPlatform4 != null)
+            raisedPlatform4.OnTriggerActivatePlatform(false);
 
         if (gateScript != null)
             gateScript.OnTriggerActivateGate(false);
@@ -75,6 +86,9 @@ public class PressurePlate : MonoBehaviour
         
         if (gateScript3 != null)
             gateScript3.OnTriggerActivateGate(false);
+        
+        if (gateScript4 != null)
+            gateScript4.OnTriggerActivateGate(false);
 
         if (material != null)
             material.SetColor("_Emission_Color", Color.black);
