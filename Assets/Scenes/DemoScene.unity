@@ -62123,7 +62123,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f03fb41a57d5fa4d906dad8ace7b1e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelEndTrigger
-  nextLevel: {}
+  nextSceneName: Level3
+  robot1: {fileID: 348657268}
+  robot2: {fileID: 1766798011}
 --- !u!65 &1854072563
 BoxCollider:
   m_ObjectHideFlags: 0

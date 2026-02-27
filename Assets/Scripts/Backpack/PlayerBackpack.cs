@@ -13,7 +13,7 @@ public class PlayerBackpack : MonoBehaviour
 
     private PlayerPairManager pairManager;
 
-    private IsBackpackable currentItem;
+    public IsBackpackable currentItem;
 
     private PlayerGrab augmentPlayerGrab;
 
