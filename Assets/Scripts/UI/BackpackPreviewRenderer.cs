@@ -15,7 +15,7 @@ public class BackpackPreviewRenderer : MonoBehaviour
     public void ShowItem(IsBackpackable item)
     {
         Clear();
-
+        
         if (item == null) return;
 
         currentPreviewInstance = Instantiate(item.gameObject, previewAnchor);
@@ -24,12 +24,10 @@ public class BackpackPreviewRenderer : MonoBehaviour
             Destroy(smoke.gameObject);//prevents smoke from showing up in the UI view if picked up early enough
 
         currentPreviewInstance.transform.localPosition = Vector3.zero;
-        currentPreviewInstance.transform.localRotation =
-            Quaternion.Euler(displayAngle); 
+        currentPreviewInstance.transform.localRotation = Quaternion.Euler(displayAngle); 
         currentPreviewInstance.transform.localScale = Vector3.one;
 
         DisablePhysics(currentPreviewInstance);
-
         SetLayerRecursively(currentPreviewInstance, LayerMask.NameToLayer("PreviewLayer"));
 
         if (!item.GetComponent<PlayerMovement>())
@@ -37,11 +35,8 @@ public class BackpackPreviewRenderer : MonoBehaviour
             augmentSlotText.text = item.gameObject.name.ToString();
             if (item.GetComponent<AugmentBase>())
             {
-                if (item.GetComponent<AugmentBase>())
-                {
-                    currentItemAugmentBase = item.GetComponent<AugmentBase>();
-                    augmentSlotCurrentStatusText.text = currentItemAugmentBase.isActive ? "(Active)" : "(Inactive)";
-                }
+                currentItemAugmentBase = item.GetComponent<AugmentBase>();
+                augmentSlotCurrentStatusText.text = currentItemAugmentBase.isActive ? "(Active)" : "(Inactive)";
             }
         }
         else

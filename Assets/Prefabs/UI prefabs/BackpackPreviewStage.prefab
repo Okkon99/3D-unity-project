@@ -81,6 +81,7 @@ MonoBehaviour:
   displayAngle: {x: 15, y: 225, z: 15}
   augmentSlotText: {fileID: 0}
   augmentSlotCurrentStatusText: {fileID: 0}
+  previewCamera: {fileID: 5747731653030770145}
 --- !u!1 &8588971934486168928
 GameObject:
   m_ObjectHideFlags: 0

@@ -478,11 +478,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cab4fdb84528b4bb95e590360b3193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerGrab
+  startBackpacked: 0
   cameraAnchor: {fileID: 4082700218336288006}
   playerRB: {fileID: 2642418309012457911}
   crosshairEdges: {fileID: 0}
   crosshairText: {fileID: 0}
   otherRobotCol: {fileID: 0}
+  otherRobotGrab: {fileID: 0}
+  playerBackpack: {fileID: 0}
   maxReach: 3
   holdDistance: 2
   followStrength: 800
@@ -490,6 +493,7 @@ MonoBehaviour:
   rotationStrength: 600
   rotationDamping: 50
   heldBody: {fileID: 0}
+  isHolding: 0
 --- !u!114 &6688149642969310969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,14 +660,14 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0

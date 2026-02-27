@@ -10,12 +10,20 @@ public abstract class AugmentBase : MonoBehaviour
     private BackpackPreviewRenderer previewRenderer;
 
     protected Rigidbody rb;
-
+    Color32 amber;
+    Color32 amberGlow;
+    
+    Color32 green;
+    Color32 greenGlow;
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
         previewRenderer = FindFirstObjectByType<BackpackPreviewRenderer>();
+        amber = new Color32(255, 191, 0, 255);
+        amberGlow = new Color32(255, 133, 0, 255);
+        green = new Color32(0, 255, 0, 255);
+        greenGlow = new Color32(0, 210, 0, 255);
     }
 
     private void Start()
@@ -57,6 +65,10 @@ public abstract class AugmentBase : MonoBehaviour
         isActive = false;
         owner = null;
         enabled = false;
+
+        BackpackPreviewRenderer pr = previewRenderer;
+        pr.augmentSlotCurrentStatusText.color = isActive ? green : amber;
+        pr.augmentSlotCurrentStatusText.fontMaterial.SetColor("_GlowColor", isActive ? greenGlow : amberGlow);
     }
 
     public virtual void Toggle()
@@ -64,5 +76,7 @@ public abstract class AugmentBase : MonoBehaviour
         BackpackPreviewRenderer pr = previewRenderer;
         isActive = !isActive;
         pr.augmentSlotCurrentStatusText.text = isActive ? "(Active)" : "(Inactive)";
+        pr.augmentSlotCurrentStatusText.color = isActive ? green : amber;
+        pr.augmentSlotCurrentStatusText.fontMaterial.SetColor("_GlowColor", isActive ? greenGlow : amberGlow);
     }
 }

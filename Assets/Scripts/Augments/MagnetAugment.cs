@@ -8,6 +8,7 @@ public class MagnetAugment : AugmentBase
 
     [Header("References")]
     [SerializeField] private Transform magnetCenter;
+    [SerializeField] private MagnetHum magnetHum;
 
 
 
@@ -36,8 +37,26 @@ public class MagnetAugment : AugmentBase
 
             Vector3 direction = (magnetCenter.position - rb.position).normalized;
             rb.AddForce(direction * pullStrength, ForceMode.Acceleration);
-
         }
+    }
+
+    public override void Toggle()
+    {
+        base.Toggle();
+
+        if (isActive)
+        {
+            
+            magnetHum.PlayHumming();
+        }
+        else
+            magnetHum.StopHumming();
+    }
+
+    public override void OnUnequipped()
+    {
+        base.OnUnequipped();
+        magnetHum.StopHumming();
     }
 
     private void OnDrawGizmosSelected()

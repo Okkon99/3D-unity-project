@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 4ad1c00f15c46694e90bedd7428b3c1b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - source: {instanceID: 0}
+  - magnetHum: {fileID: 8300000, guid: eb131cc1c8365f94b9c32fea1c3c68f6, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

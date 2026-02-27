@@ -162,6 +162,8 @@ public class PlayerGrab : MonoBehaviour
     // UI
     void UpdateUI(TargetType targetType)
     {
+
+
         if (heldBody != null)
         {
             SetAlpha(1f);
@@ -169,27 +171,34 @@ public class PlayerGrab : MonoBehaviour
             crosshairEdges.text = "[             ]";
             return;
         }
+        else if (otherRobotGrab.heldBody == GetComponent<Rigidbody>())
+        {
+            SetAlpha(edgeColor.a);
+            SetText("");
+            crosshairEdges.text = "[        ]";
+            return;
+        }
 
         switch (targetType)
-        {
-            case TargetType.Grabbable:
-                SetAlpha(1f);
-                SetText("grab");
-                crosshairEdges.text = "[        ]";
-                break;
+            {
+                case TargetType.Grabbable:
+                    SetAlpha(1f);
+                    SetText("grab");
+                    crosshairEdges.text = "[        ]";
+                    break;
 
-            case TargetType.Pressable:
-                SetAlpha(1f);
-                SetText("press");
-                crosshairEdges.text = "[          ]";
-                break;
+                case TargetType.Pressable:
+                    SetAlpha(1f);
+                    SetText("press");
+                    crosshairEdges.text = "[          ]";
+                    break;
 
-            default:
-                SetAlpha(edgeColor.a);
-                SetText("");
-                crosshairEdges.text = "[        ]";
-                break;
-        }
+                default:
+                    SetAlpha(edgeColor.a);
+                    SetText("");
+                    crosshairEdges.text = "[        ]";
+                    break;
+            }
     }
 
     TargetType CheckForTarget(out RaycastHit hit)
