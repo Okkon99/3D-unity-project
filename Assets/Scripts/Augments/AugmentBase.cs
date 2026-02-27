@@ -12,7 +12,7 @@ public abstract class AugmentBase : MonoBehaviour
     protected Rigidbody rb;
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
         previewRenderer = FindFirstObjectByType<BackpackPreviewRenderer>();

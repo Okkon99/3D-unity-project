@@ -56,6 +56,7 @@ public class PlayerBackpack : MonoBehaviour
                 augmentPlayerGrab.Release();
             }
 
+            augmentPlayerGrab.Release();
             augmentPlayerGrab.enabled = false;
         }
 
@@ -72,8 +73,6 @@ public class PlayerBackpack : MonoBehaviour
             var owner = GetComponent<PlayerMovement>();
             owner.UnequipAugment();
         }
-
-
 
         currentItem.OnExitBackpack(force);
 

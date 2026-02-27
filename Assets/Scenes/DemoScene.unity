@@ -1296,9 +1296,11 @@ MonoBehaviour:
   raisedPlatform: {fileID: 0}
   raisedPlatform2: {fileID: 0}
   raisedPlatform3: {fileID: 0}
+  raisedPlatform4: {fileID: 0}
   gateScript: {fileID: 1993365638}
   gateScript2: {fileID: 0}
   gateScript3: {fileID: 0}
+  gateScript4: {fileID: 0}
   isPressed: 0
 --- !u!1 &30841245
 GameObject:
@@ -5456,9 +5458,11 @@ MonoBehaviour:
   raisedPlatform: {fileID: 0}
   raisedPlatform2: {fileID: 0}
   raisedPlatform3: {fileID: 0}
+  raisedPlatform4: {fileID: 0}
   gateScript: {fileID: 1013622442}
   gateScript2: {fileID: 0}
   gateScript3: {fileID: 0}
+  gateScript4: {fileID: 0}
   isPressed: 0
 --- !u!1 &173200827
 GameObject:
@@ -49767,7 +49771,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 429311581022854392, guid: b62e21e29293aaa4babbb36b151b91d5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.8
+      value: 6.8
       objectReference: {fileID: 0}
     - target: {fileID: 429311581022854392, guid: b62e21e29293aaa4babbb36b151b91d5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -53016,8 +53020,8 @@ Transform:
   m_GameObject: {fileID: 1551254985}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 46.000004, y: 0, z: -5}
-  m_LocalScale: {x: 10, y: 3, z: 6}
+  m_LocalPosition: {x: 50.000004, y: 0, z: -5}
+  m_LocalScale: {x: 10, y: 6, z: 12}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 614171585}
@@ -66928,8 +66932,8 @@ Transform:
   m_GameObject: {fileID: 2023145109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
-  m_LocalPosition: {x: 35, y: 1, z: 0}
-  m_LocalScale: {x: 10, y: 4, z: 10}
+  m_LocalPosition: {x: 34, y: 2, z: 0}
+  m_LocalScale: {x: 8, y: 8, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 614171585}
