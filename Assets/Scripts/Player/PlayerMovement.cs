@@ -258,7 +258,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 RemoveWallPush(Vector3 direction)
     {
-        float checkDistance = 0.6f;
+        float checkDistance = 0.4f;
 
         if (Physics.SphereCast(
             playerCollider.bounds.center,
