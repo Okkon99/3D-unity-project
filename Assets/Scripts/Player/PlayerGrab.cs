@@ -127,12 +127,9 @@ public class PlayerGrab : MonoBehaviour
 
             isHolding = true;
 
-            if (heldBody.TryGetComponent<AugmentBase>(out var augment))
+            if (heldBody.TryGetComponent<StickyCubeAugment>(out var stickyCube))
             {
-                if (augment is StickyCubeAugment stickyCube)
-                {
-                    stickyCube.UnStick();
-                }
+                stickyCube.UnStick();
             }
         }
         else if (hit.collider.CompareTag("Player"))
@@ -163,6 +160,12 @@ public class PlayerGrab : MonoBehaviour
         Physics.IgnoreCollision(heldBodyCol, otherRobotCol, false);
         heldBody.linearVelocity = Vector3.zero;
         heldBody.angularVelocity = Vector3.zero;
+        
+        if (heldBody.TryGetComponent<StickyCubeAugment>(out var stickyCube))
+        {
+            stickyCube.OnRelease();
+        }
+
         heldBody = null;
         isHolding = false;
     }

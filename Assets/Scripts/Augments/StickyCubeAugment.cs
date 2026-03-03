@@ -6,11 +6,11 @@ public class StickyCubeAugment : AugmentBase
     public override bool Toggleable => toggleable;
 
     private bool isStuck = false;
-    private Transform stuckParent;
+    private bool canStick = true;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
-        if (isStuck) return;
+        if (isStuck || !canStick) return;
 
         int floorLayer = LayerMask.NameToLayer("Floor");
         if (collision.collider.gameObject.layer == floorLayer)
@@ -22,10 +22,13 @@ public class StickyCubeAugment : AugmentBase
     private void StickToSurface(Transform target)
     {
         isStuck = true;
-        stuckParent = target;
 
         rb.isKinematic = true;
-        transform.SetParent(stuckParent);
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        transform.position = transform.position;
     }
 
     public void UnStick()
@@ -33,14 +36,19 @@ public class StickyCubeAugment : AugmentBase
         if (!isStuck) return;
 
         isStuck = false;
-        transform.SetParent(null);
-        rb.isKinematic = false; 
+        canStick = false;
+        rb.isKinematic = false;
     }
 
     public override void OnEquipped(PlayerMovement newOwner)
     {
         base.OnEquipped(newOwner);
         UnStick();
+    }
+
+    public void OnRelease()
+    {
+        canStick = true;
     }
 
     public override void ResetToSpawn()
@@ -51,7 +59,6 @@ public class StickyCubeAugment : AugmentBase
         rb.angularVelocity = Vector3.zero;
 
         isStuck = false;
-        stuckParent = null;
         rb.isKinematic = false;
 
         transform.position = new Vector3(startPosition.x, startPosition.y, startPosition.z);

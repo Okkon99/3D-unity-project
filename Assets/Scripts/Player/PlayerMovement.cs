@@ -68,6 +68,9 @@ public class PlayerMovement : MonoBehaviour
     private Quaternion flipTargetRotation;
     [SerializeField] private float flipDuration = 0.25f;
     private float flipTimer;
+    private float flipStartPitch;
+    private float flipTargetPitch;
+
 
     public bool IsGrounded => isGrounded;
 
@@ -98,11 +101,11 @@ public class PlayerMovement : MonoBehaviour
             flipTimer += Time.deltaTime;
             float t = flipTimer / flipDuration;
 
-            transform.rotation = Quaternion.Slerp(
-                flipStartRotation,
-                flipTargetRotation,
-                t
-            );
+            t = Mathf.Clamp01(t);
+
+            storedPitch = Mathf.Lerp(flipStartPitch, flipTargetPitch, t);
+
+            transform.rotation = Quaternion.Slerp(flipStartRotation, flipTargetRotation, t);
 
             if (t >= 1f)
             {
@@ -363,7 +366,6 @@ public class PlayerMovement : MonoBehaviour
 
             Gizmos.DrawLine(transform.position, rb.linearVelocity + transform.position);
         }
-
     }
 
     public void SetActive(bool active)
@@ -421,7 +423,11 @@ public class PlayerMovement : MonoBehaviour
 
         flipStartRotation = transform.rotation;
 
-        flipTargetRotation =
-            Quaternion.AngleAxis(180f, transform.forward) * transform.rotation;
+        Vector3 currentForward = transform.forward;
+
+        flipTargetRotation = Quaternion.LookRotation(currentForward, -GravityDirection);
+
+        flipStartPitch = storedPitch;
+        flipTargetPitch = -storedPitch;
     }
 }

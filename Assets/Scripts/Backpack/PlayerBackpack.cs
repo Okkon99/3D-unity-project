@@ -71,6 +71,10 @@ public class PlayerBackpack : MonoBehaviour
         var augment = currentItem.GetComponent<AugmentBase>();
         if (augment != null)
         {
+            if (currentItem.TryGetComponent<StickyCubeAugment>(out var stickyCube))
+            {
+                stickyCube.OnRelease();
+            }
             var owner = GetComponent<PlayerMovement>();
             owner.UnequipAugment();
         }
