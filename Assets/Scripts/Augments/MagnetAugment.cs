@@ -45,10 +45,7 @@ public class MagnetAugment : AugmentBase
         base.Toggle();
 
         if (isActive)
-        {
-            
             magnetHum.PlayHumming();
-        }
         else
             magnetHum.StopHumming();
     }

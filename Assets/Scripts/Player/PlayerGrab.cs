@@ -126,6 +126,14 @@ public class PlayerGrab : MonoBehaviour
             Physics.IgnoreCollision(heldBodyCol, otherRobotCol, true);
 
             isHolding = true;
+
+            if (heldBody.TryGetComponent<AugmentBase>(out var augment))
+            {
+                if (augment is StickyCubeAugment stickyCube)
+                {
+                    stickyCube.UnStick();
+                }
+            }
         }
         else if (hit.collider.CompareTag("Player"))
         {

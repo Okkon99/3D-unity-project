@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BackpackPreviewRenderer : MonoBehaviour
@@ -36,7 +37,12 @@ public class BackpackPreviewRenderer : MonoBehaviour
             if (item.GetComponent<AugmentBase>())
             {
                 currentItemAugmentBase = item.GetComponent<AugmentBase>();
-                augmentSlotCurrentStatusText.text = currentItemAugmentBase.isActive ? "(Active)" : "(Inactive)";
+                if (currentItemAugmentBase.Toggleable)
+                {
+                    augmentSlotCurrentStatusText.text = currentItemAugmentBase.isActive ? "(Active)" : "(Inactive)";
+                    augmentSlotCurrentStatusText.color = currentItemAugmentBase.isActive ? currentItemAugmentBase.green : currentItemAugmentBase.amber;
+                    augmentSlotCurrentStatusText.fontMaterial.SetColor("_GlowColor", currentItemAugmentBase.isActive ? currentItemAugmentBase.greenGlow : currentItemAugmentBase.amberGlow);
+                }
             }
         }
         else

@@ -46,6 +46,7 @@ public class PlayerBackpack : MonoBehaviour
         var movement = item.GetComponent<PlayerMovement>();
         if (movement != null)
         {
+
             pairManager.ForceSwapTo(GetComponent<PlayerMovement>());
             previewRenderer?.ShowItem(item);
 
@@ -78,7 +79,11 @@ public class PlayerBackpack : MonoBehaviour
 
         var playerMovement = currentItem.GetComponent<PlayerMovement>();
         if (playerMovement != null)
-            pairManager.ForceSwapTo(playerMovement.GetComponent<PlayerMovement>());
+        {
+            pairManager.ForceSwapTo(playerMovement);
+            if (playerMovement.GravityDirection != Vector3.down)
+                playerMovement.StartFlip();
+        }
 
         if (deploySmokePrefab != null)
         {

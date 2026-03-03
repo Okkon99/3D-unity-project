@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -61,6 +62,17 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit groundHit;
     public AugmentBase equippedAugment;
 
+    // gravity augment stuff
+    private bool isFlipping;
+    private Quaternion flipStartRotation;
+    private Quaternion flipTargetRotation;
+    [SerializeField] private float flipDuration = 0.25f;
+    private float flipTimer;
+
+    public bool IsGrounded => isGrounded;
+
+
+
     //debug stuff
     Vector3 startPos;
     Vector3 tempInputDir;
@@ -80,6 +92,27 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+
+        if (isFlipping)
+        {
+            flipTimer += Time.deltaTime;
+            float t = flipTimer / flipDuration;
+
+            transform.rotation = Quaternion.Slerp(
+                flipStartRotation,
+                flipTargetRotation,
+                t
+            );
+
+            if (t >= 1f)
+            {
+                isFlipping = false;
+                transform.rotation = flipTargetRotation;
+            }
+
+            return;
+        }
+
 
         // CACHE INPUTS
         var input = InputManager.instance.Input.Gameplay;
@@ -152,10 +185,7 @@ public class PlayerMovement : MonoBehaviour
 
         //ApplyFriction();
 
-
-
-
-        //ApplyBetterGravity(); obsolete potentially, staying as a reminder just in case i do want it back.
+        ApplyGravity();
 
         canJump = isGrounded || coyoteTime > 0f;
 
@@ -182,7 +212,7 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        rb.AddForce(Vector3.up * jumpHeight, ForceMode.VelocityChange);
+        rb.AddForce(-GravityDirection * jumpHeight, ForceMode.VelocityChange);
 
         coyoteTime = 0f;
     }
@@ -191,16 +221,13 @@ public class PlayerMovement : MonoBehaviour
     {
         ResetCoyoteTime();
 
-        if (rb.linearVelocity.y < 0f)
+        float verticalSpeed = Vector3.Dot(rb.linearVelocity, GravityDirection);
+
+        if (verticalSpeed > 0f)
         {
-            rb.linearVelocity = new Vector3(
-                rb.linearVelocity.x,
-                0f,
-                rb.linearVelocity.z
-            );
+            rb.linearVelocity -= GravityDirection * verticalSpeed;
         }
 
-        transform.position = new Vector3(transform.position.x, groundHit.point.y+transform.localScale.y, transform.position.z);
     }
 
     private void GetDesiredVelocity()
@@ -242,8 +269,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (isActivePlayer && (velocity.magnitude < 10f))
         {
-            Vector3 lateralVelocity = new Vector3(velocity.x, 0f, velocity.z);
-            Vector3 desiredLateral = new Vector3(desiredVelocity.x, 0f, desiredVelocity.z);
+            Vector3 lateralVelocity = Vector3.ProjectOnPlane(velocity, GravityDirection);
+            Vector3 desiredLateral = Vector3.ProjectOnPlane(desiredVelocity, GravityDirection);
 
             Vector3 airDelta = desiredLateral - lateralVelocity;
 
@@ -254,6 +281,11 @@ public class PlayerMovement : MonoBehaviour
 
             rb.linearVelocity += new Vector3(airAccel.x, 0f, airAccel.z);
         }
+    }
+
+    private void ApplyGravity()
+    {
+        rb.AddForce(-GravityDirection * Physics.gravity.y, ForceMode.Acceleration);
     }
 
     private Vector3 RemoveWallPush(Vector3 direction)
@@ -285,11 +317,11 @@ public class PlayerMovement : MonoBehaviour
         float radius = playerCollider.radius * 0.95f;
         float height = playerCollider.height * 0.5f - playerCollider.radius;
 
-        Vector3 bottom = center + Vector3.down * height;
+        Vector3 bottom = center + GravityDirection * height;
 
         float checkDistance = 0.15f;
 
-        return Physics.SphereCast(bottom, radius, Vector3.down, out hit, checkDistance, floorLayer, QueryTriggerInteraction.Ignore);
+        return Physics.SphereCast(bottom, radius, GravityDirection, out hit, checkDistance, floorLayer, QueryTriggerInteraction.Ignore);
     }
 
     private void OnDrawGizmos()
@@ -298,7 +330,7 @@ public class PlayerMovement : MonoBehaviour
         float radius = playerCollider.radius * 0.95f;
         float height = playerCollider.height * 0.5f - playerCollider.radius;
 
-        Vector3 bottom = center + Vector3.down * height;
+        Vector3 bottom = center + GravityDirection * height;
 
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(bottom, radius);
@@ -364,5 +396,32 @@ public class PlayerMovement : MonoBehaviour
             equippedAugment.OnUnequipped();
 
         equippedAugment = null;
+    }
+
+
+    public Vector3 GravityDirection { get; private set; } = Vector3.down;
+
+    public void SetGravityDirection(Vector3 newDirection)
+    {
+        Vector3 oldGravity = GravityDirection;
+        GravityDirection = newDirection.normalized;
+
+        if (Vector3.Dot(oldGravity, GravityDirection) < -0.99f)
+        {
+            StartFlip();
+        }
+    }
+
+    public void StartFlip()
+    {
+        if (isFlipping) return;
+
+        isFlipping = true;
+        flipTimer = 0f;
+
+        flipStartRotation = transform.rotation;
+
+        flipTargetRotation =
+            Quaternion.AngleAxis(180f, transform.forward) * transform.rotation;
     }
 }

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public abstract class AugmentBase : MonoBehaviour
 {
-
     public bool isActive;
     protected PlayerMovement owner;
     protected Vector3 startPosition;
@@ -10,11 +9,13 @@ public abstract class AugmentBase : MonoBehaviour
     private BackpackPreviewRenderer previewRenderer;
 
     protected Rigidbody rb;
-    Color32 amber;
-    Color32 amberGlow;
-    
-    Color32 green;
-    Color32 greenGlow;
+    public Color32 amber;
+    public Color32 amberGlow;
+
+    public Color32 green;
+    public Color32 greenGlow;
+
+    public virtual bool Toggleable => true;
 
     protected virtual void Awake()
     {
@@ -63,8 +64,8 @@ public abstract class AugmentBase : MonoBehaviour
     public virtual void OnUnequipped()
     {
         isActive = false;
-        owner = null;
         enabled = false;
+        owner = null;
 
         BackpackPreviewRenderer pr = previewRenderer;
         pr.augmentSlotCurrentStatusText.color = isActive ? green : amber;
@@ -73,6 +74,8 @@ public abstract class AugmentBase : MonoBehaviour
 
     public virtual void Toggle()
     {
+        if (!Toggleable) return;
+
         BackpackPreviewRenderer pr = previewRenderer;
         isActive = !isActive;
         pr.augmentSlotCurrentStatusText.text = isActive ? "(Active)" : "(Inactive)";
