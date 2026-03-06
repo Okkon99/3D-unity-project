@@ -61,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
     float coyoteTime;
     RaycastHit groundHit;
     public AugmentBase equippedAugment;
+    private Rigidbody groundRB;
 
     // gravity augment stuff
     private bool isFlipping;
@@ -197,6 +198,7 @@ public class PlayerMovement : MonoBehaviour
             Jump();
         }
         jumpPressed = false;
+
     }
 
 
@@ -255,6 +257,12 @@ public class PlayerMovement : MonoBehaviour
         tempInputDir = inputDirection;
         inputDirection = RemoveWallPush(inputDirection);
         desiredVelocity = inputDirection * speed;
+
+        if (isGrounded && groundRB != null)
+        {
+            Vector3 platformVel = Vector3.ProjectOnPlane(groundRB.linearVelocity, GravityDirection);
+            desiredVelocity += platformVel;
+        }
     }
 
     private void ApplyAccelVector()
@@ -324,7 +332,26 @@ public class PlayerMovement : MonoBehaviour
 
         float checkDistance = 0.15f;
 
-        return Physics.SphereCast(bottom, radius, GravityDirection, out hit, checkDistance, floorLayer, QueryTriggerInteraction.Ignore);
+        bool grounded = Physics.SphereCast(bottom, radius, GravityDirection, out hit, checkDistance, floorLayer, QueryTriggerInteraction.Ignore);
+
+        if (grounded)
+            groundRB = hit.rigidbody;
+        else
+            groundRB = null;
+
+        return grounded;
+    }
+
+    void ApplyGroundVelocity()
+    {
+        if (!isGrounded || groundRB == null)
+            return;
+
+        Vector3 groundRBVelocity = groundRB.linearVelocity;
+
+        Vector3 relativeVelocity = rb.linearVelocity - groundRBVelocity;
+
+        rb.linearVelocity = relativeVelocity + groundRBVelocity;
     }
 
     private void OnDrawGizmos()

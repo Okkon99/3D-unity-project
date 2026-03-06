@@ -1,12 +1,16 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class StickyCubeAugment : AugmentBase
 {
     public bool toggleable = false;
     public override bool Toggleable => toggleable;
 
+    private FixedJoint stickJoint;
+
     private bool isStuck = false;
     private bool canStick = true;
+
 
     private void OnCollisionStay(Collision collision)
     {
@@ -15,29 +19,34 @@ public class StickyCubeAugment : AugmentBase
         int floorLayer = LayerMask.NameToLayer("Floor");
         if (collision.collider.gameObject.layer == floorLayer)
         {
-            StickToSurface(collision.collider.transform);
+            StickToSurface(collision.collider);
         }
     }
 
-    private void StickToSurface(Transform target)
+    private void StickToSurface(Collider target)
     {
         isStuck = true;
-
-        rb.isKinematic = true;
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        transform.position = transform.position;
+        stickJoint = gameObject.AddComponent<FixedJoint>();
+
+        Rigidbody targetRB = target.attachedRigidbody;
+
+        if (targetRB != null)
+            stickJoint.connectedBody = targetRB;
     }
 
     public void UnStick()
     {
         if (!isStuck) return;
 
+        if (stickJoint != null)
+            Destroy(stickJoint);
+
         isStuck = false;
         canStick = false;
-        rb.isKinematic = false;
     }
 
     public override void OnEquipped(PlayerMovement newOwner)

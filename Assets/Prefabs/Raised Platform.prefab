@@ -123,6 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7626023422419157685}
+  - component: {fileID: 7580975447366799226}
   m_Layer: 0
   m_Name: PlatformRoot
   m_TagString: Untagged
@@ -146,6 +147,33 @@ Transform:
   - {fileID: 6497090303656032998}
   m_Father: {fileID: 6063735929336053108}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7580975447366799226
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134273151529656010}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2734661502944089162
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +202,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 4, z: 0}
-  m_LocalScale: {x: 5, y: 1, z: 5}
+  m_LocalScale: {x: 4, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6063735929336053108}
@@ -265,7 +293,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 1, z: 5}
+  m_LocalScale: {x: 4, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7626023422419157685}
@@ -358,7 +386,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6063735929336053108}
   - component: {fileID: 7432863789619532839}
-  - component: {fileID: 815713525855959818}
   m_Layer: 0
   m_Name: Raised Platform
   m_TagString: Untagged
@@ -397,16 +424,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaisedPlatform
   platformMovement: 1
+  triggerMode: 0
   pillarHeight: 1
   pillarWidth: 1
-  PlatformSizeX: 5
+  PlatformSizeX: 4
   PlatformSizeY: 1
-  PlatformSizeZ: 5
-  extensionMoveSpeed: 2
-  retractionMoveSpeed: 2
+  PlatformSizeZ: 4
+  extensionMoveSpeed: 4
+  retractionMoveSpeed: 4
   stayTime: 2
   endPoint: {fileID: 429311581022854392}
-  triggerMode: 0
   curve:
     serializedVersion: 2
     m_Curve:
@@ -431,30 +458,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!54 &815713525855959818
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5842108811310822390}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0

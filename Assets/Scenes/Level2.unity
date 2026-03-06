@@ -15724,7 +15724,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4929261826268553657, guid: f70e19506e7484644a7cbafd154352a7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 110.5
+      value: 111.5
       objectReference: {fileID: 0}
     - target: {fileID: 4929261826268553657, guid: f70e19506e7484644a7cbafd154352a7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19125,6 +19125,18 @@ PrefabInstance:
     - target: {fileID: 5684033424109324604, guid: a0164555d80b5cb41bbaf667f3bce214, type: 3}
       propertyPath: m_Name
       value: LevelEndTrigger (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7544518145858563625, guid: a0164555d80b5cb41bbaf667f3bce214, type: 3}
+      propertyPath: robot1
+      value: 
+      objectReference: {fileID: 348657268}
+    - target: {fileID: 7544518145858563625, guid: a0164555d80b5cb41bbaf667f3bce214, type: 3}
+      propertyPath: robot2
+      value: 
+      objectReference: {fileID: 1766798011}
+    - target: {fileID: 7544518145858563625, guid: a0164555d80b5cb41bbaf667f3bce214, type: 3}
+      propertyPath: nextSceneName
+      value: Level3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

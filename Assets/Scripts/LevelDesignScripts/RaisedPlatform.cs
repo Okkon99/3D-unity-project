@@ -22,10 +22,6 @@ public class RaisedPlatform : MonoBehaviour
     [SerializeField] private float stayTime = 1f;
     [SerializeField] private Transform endPoint;
 
-
-
-
-
     [Header("Animation Settings")]
     [SerializeField] AnimationCurve curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
@@ -48,6 +44,7 @@ public class RaisedPlatform : MonoBehaviour
     private Transform pillar;
     private Transform platformRoot;
     private Transform platformMesh;
+    private Rigidbody rb;
 
 
 
@@ -66,6 +63,8 @@ public class RaisedPlatform : MonoBehaviour
         CacheChildren();
         EnsureEndPoint();
         ApplyChanges();
+
+        rb = platformRoot.GetComponent<Rigidbody>();
     }
 
     private void Start()
@@ -75,7 +74,7 @@ public class RaisedPlatform : MonoBehaviour
     }
 
 
-    private void Update()
+    private void FixedUpdate()
     {
         switch (platformMovement)
         {
@@ -156,15 +155,7 @@ public class RaisedPlatform : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        collision.gameObject.transform.SetParent(transform.GetChild(1));
-    }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        collision.gameObject.transform.SetParent(null);
-    }
 
 
     private void Static()
@@ -188,7 +179,8 @@ public class RaisedPlatform : MonoBehaviour
             moveSpeed = retractionMoveSpeed;
 
 
-        platformRoot.position = Vector3.MoveTowards(platformRoot.position, target, moveSpeed * Time.deltaTime);
+        Vector3 newPos = Vector3.MoveTowards(rb.position, target, moveSpeed * Time.deltaTime);
+        rb.MovePosition(newPos);
 
         if (Vector3.Distance(platformRoot.position, target) < 0.01f)
         {
@@ -222,7 +214,8 @@ public class RaisedPlatform : MonoBehaviour
         if (target == startPos)
             moveSpeed = retractionMoveSpeed;
 
-        platformRoot.position = Vector3.MoveTowards(platformRoot.position, target, moveSpeed * Time.deltaTime);
+        Vector3 newPos = Vector3.MoveTowards(rb.position, target, moveSpeed * Time.deltaTime);
+        rb.MovePosition(newPos);
 
         if (Vector3.Distance(platformRoot.position, target) < 0.01f)
         {

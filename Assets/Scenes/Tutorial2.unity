@@ -36956,6 +36956,14 @@ PrefabInstance:
       propertyPath: platformMovement
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7432863789619532839, guid: b62e21e29293aaa4babbb36b151b91d5, type: 3}
+      propertyPath: extensionMoveSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7432863789619532839, guid: b62e21e29293aaa4babbb36b151b91d5, type: 3}
+      propertyPath: retractionMoveSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7626023422419157685, guid: b62e21e29293aaa4babbb36b151b91d5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
