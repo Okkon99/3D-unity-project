@@ -74,6 +74,7 @@ MonoBehaviour:
   greenGlow:
     serializedVersion: 2
     rgba: 0
+  cooldownTimer: 1
 --- !u!54 &1198293176825995675
 Rigidbody:
   m_ObjectHideFlags: 0

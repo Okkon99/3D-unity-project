@@ -60,8 +60,13 @@ public class StickyCubeAugment : AugmentBase
         canStick = true;
     }
 
+
+
+
     public override void ResetToSpawn()
     {
+        UnStick();
+
         transform.SetParent(null);
 
         rb.linearVelocity = Vector3.zero;
