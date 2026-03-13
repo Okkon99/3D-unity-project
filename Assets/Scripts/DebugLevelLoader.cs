@@ -28,18 +28,18 @@ public class DebugLevelLoader : MonoBehaviour
       
         if (Input.GetKeyDown(KeyCode.F8))
             SceneManager.LoadScene("Level5");
-      /*
+      
         if (Input.GetKeyDown(KeyCode.F9))
-            SceneManager.LoadScene("DemoScene");
-      
-        if (Input.GetKeyDown(KeyCode.F10))
-            SceneManager.LoadScene("DemoScene");
-      
-        if (Input.GetKeyDown(KeyCode.F11))
-            SceneManager.LoadScene("DemoScene");
-      
-        if (Input.GetKeyDown(KeyCode.F12))
-            SceneManager.LoadScene("DemoScene");*/
+            SceneManager.LoadScene("Level6");
+        /*
+          if (Input.GetKeyDown(KeyCode.F10))
+              SceneManager.LoadScene("DemoScene");
+
+          if (Input.GetKeyDown(KeyCode.F11))
+              SceneManager.LoadScene("DemoScene");
+
+          if (Input.GetKeyDown(KeyCode.F12))
+              SceneManager.LoadScene("DemoScene");*/
 
     }
 }
